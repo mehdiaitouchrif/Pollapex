@@ -1,10 +1,12 @@
-const dotenv = require('dotenv')
-dotenv.config()
+const dotenv = require("dotenv");
+dotenv.config();
 
-const {port} = require('./api/config')
+const { port } = require("./api/config");
 
-const app = require('./api/server')
+const app = require("./api/server");
 
-app.listen(port, ()=> {
-    console.log(`hello on http://localhost:${port}`)
-} )
+require("./api/config/database")(); // connects to mongo
+
+app.listen(port, () => {
+  console.log(`live on http://localhost:${port}`);
+});
