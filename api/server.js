@@ -12,6 +12,7 @@ app.use(cors());
 
 // Router
 app.use("/api/auth", require("./routes/auth"));
+app.use("/api/surveys", require("./routes/survey"));
 
 // Error
 app.use((err, req, res, next) => {
