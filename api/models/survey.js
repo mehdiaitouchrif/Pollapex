@@ -12,6 +12,7 @@ const SurveySchema = new mongoose.Schema({
     enum: ["light", "dark", "blue", "custom"],
     default: "light",
   },
+  customTheme: { type: String },
 });
 
 const Survey = mongoose.model("Survey", SurveySchema);

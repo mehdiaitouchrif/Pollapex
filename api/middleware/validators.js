@@ -13,6 +13,10 @@ const createSurveyValidator = [
     .optional()
     .isIn(["light", "dark", "blue", "custom"])
     .withMessage("Invalid theme"),
+  body("customTheme")
+    .optional()
+    .isHexColor()
+    .withMessage("Invalid Hex color code"),
 ];
 
 module.exports = { createSurveyValidator };

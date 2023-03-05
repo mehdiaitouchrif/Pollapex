@@ -59,8 +59,14 @@ exports.createSurvey = async (req, res, next) => {
 exports.updateSurvey = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { title, description, collaborators, backgroundImage, theme } =
-      req.body;
+    const {
+      title,
+      description,
+      collaborators,
+      backgroundImage,
+      theme,
+      customTheme,
+    } = req.body;
     const update = {};
 
     if (title) update.title = title;
@@ -68,6 +74,7 @@ exports.updateSurvey = async (req, res, next) => {
     if (collaborators) update.collaborators = collaborators;
     if (backgroundImage) update.backgroundImage = backgroundImage;
     if (theme) update.theme = theme;
+    if (customTheme) update.customTheme = customTheme;
 
     // Verify user is owner or collaborator
     const survey = await Survey.findOne({ _id: id })
