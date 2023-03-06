@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const QuestionSchema = new mongoose.Schema({
   question: { type: String, required: true },
+  optional: { type: Boolean, default: false },
   type: {
     type: String,
     enum: [

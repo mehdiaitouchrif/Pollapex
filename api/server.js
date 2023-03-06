@@ -16,6 +16,7 @@ app.use(morgan("dev"));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/surveys", require("./routes/survey"));
 app.use("/api/questions", require("./routes/question"));
+app.use("/api/responses", require("./routes/response"));
 
 // Error
 app.use((err, req, res, next) => {
