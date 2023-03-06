@@ -66,6 +66,7 @@ exports.updateSurvey = async (req, res, next) => {
       backgroundImage,
       theme,
       customTheme,
+      questions,
     } = req.body;
     const update = {};
 
@@ -75,6 +76,7 @@ exports.updateSurvey = async (req, res, next) => {
     if (backgroundImage) update.backgroundImage = backgroundImage;
     if (theme) update.theme = theme;
     if (customTheme) update.customTheme = customTheme;
+    if (questions) update.questions = await Question.insertMany(questions);
 
     // Verify user is owner or collaborator
     const survey = await Survey.findOne({ _id: id })
