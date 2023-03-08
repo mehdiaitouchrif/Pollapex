@@ -1,3 +1,4 @@
+const excel = require("exceljs");
 const Response = require("../models/response");
 const Survey = require("../models/survey");
 
@@ -102,6 +103,69 @@ exports.getResponse = async (req, res, next) => {
     }
     res.status(200).json({ success: true, data: response });
   } catch (error) {
+    next(error);
+  }
+};
+
+// @desc  Export responses in excel file
+// @route  GET /api/surveys/:id/export
+exports.exportResponsesToExcel = async (req, res, next) => {
+  try {
+    // Get survey ID from request params
+    const { id } = req.params;
+
+    // Find the survey with the given ID
+    const survey = await Survey.findById(id).populate("questions");
+
+    // Make sure user owns survey
+    if (req.user._id.toString() !== survey.owner.toString()) {
+      const error = new Error("Unauthorized");
+      error.statusCode = 403;
+      throw error;
+    }
+
+    // Find all responses for the survey
+    const responses = await Response.find({ survey: id }).populate({
+      path: "answers.question",
+      model: "Question",
+    });
+
+    // Create a new workbook
+    const workbook = new excel.Workbook();
+
+    // Add a new worksheet
+    const worksheet = workbook.addWorksheet("Responses");
+
+    // Add column headers
+    worksheet.columns = survey.questions.map((question) => ({
+      header: question.question,
+      key: question._id.toString(),
+      width: 30,
+    }));
+
+    // Loop through each response and add the data to the worksheet
+    responses.forEach((response) => {
+      const row = {};
+      response.answers.forEach((answer) => {
+        row[answer.question._id.toString()] = answer.answer;
+      });
+      worksheet.addRow(row);
+    });
+
+    // Set the response headers to tell the browser to download the file as an Excel file
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=" + `${survey.title}_responses.xlsx`
+    );
+
+    // Write the workbook to the response
+    await workbook.xlsx.write(res);
+  } catch (error) {
+    console.log(error);
     next(error);
   }
 };
