@@ -16,7 +16,7 @@
 - Create surveys with custom questions
 - Share surveys via a unique URL
 - Collect responses and display results in a dashboard
-- Export responses to an Excel for further analysis
+- Export responses to an Excel file for further analysis
 - Authentication and authorization using JWT
 
 ## Technologies
@@ -31,7 +31,7 @@
 ## Setup
 
 1. Clone the repository:
-   git clone https://github.com/<your-username>/survey-app.git
+   git clone https://github.com/<your-username>/Pollapex.git
 
 2. Install dependencies:
    cd Pollapex
@@ -65,11 +65,10 @@
 | /api/questions/:id                | DELETE | Delete a question by ID |
 | /api/responses                    | GET    | Get all responses       |
 | /api/suveys/:id/responses         | POST   | Create a new response   |
-| /api/surveys/:id/responses        | GET    | Get a response by ID    |
-| /api/responses/:id                | PUT    | a response by ID        |
-| /api/responses/:id                | DELETE | a response by ID        |
-| /api/responses/:id                | DELETE | a response by ID        |
-| /api/surveys/:id/responses/export | DELETE | a response by ID        |
+| /api/surveys/:id/responses        | GET    | Get a survey responses  |
+| /api/responses/:id                | PUT    | Update a response by ID |
+| /api/responses/:id                | DELETE | Delete a response by ID |
+| /api/surveys/:id/responses/export | DELETE | Export to excel file    |
 
 ## Contributing
 
