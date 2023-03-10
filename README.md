@@ -1,6 +1,6 @@
 # Pollapex
 
-> Pollapex is a full stack JavaScript application designed for building powerful surveys and polls. It uses React, Redux, Node.js, Express, and MongoDB to provide a user-friendly tool for collecting valuable insights and feedback from audiences. With easy sharing and analysis of results, Pollapex is perfect for businesses, organizations, and individuals looking to take their data collection to the next level.
+> Pollapex is a full stack JavaScript application designed for building powerful surveys and polls. It provides a user-friendly tool for collecting valuable insights and feedback from audiences. With easy sharing and analysis of results, Pollapex is perfect for businesses, organizations, and individuals looking to take their data collection to the next level.
 
 ## Table of Contents
 
@@ -24,9 +24,7 @@
 - MongoDB: NoSQL database to store survey data
 - Express: Backend framework to create RESTful APIs
 - React: Frontend library to create user interface
-- Redux: Library for centralizing application state
 - Node.js: Runtime environment for server-side JavaScript
-- JWT: JSON Web Token for secure authentication and authorization
 
 ## Setup
 
@@ -50,25 +48,25 @@
 
 ## API Endpoints
 
-| Endpoint                          | Method | Description             |
-| --------------------------------- | ------ | ----------------------- |
-| /api/auth/signup                  | POST   | Register a new user     |
-| /api/auth/signin                  | POST   | Log in an existing user |
-| /api/auth/me                      | POST   | Get current user        |
-| /api/surveys                      | GET    | Get all user surveys    |
-| /api/surveys                      | POST   | Create a new survey     |
-| /api/surveys/:id                  | GET    | Get a survey by ID      |
-| /api/surveys/:id                  | PUT    | Update a survey by ID   |
-| /api/surveys/:id                  | DELETE | Delete a survey by ID   |
-| /api/questions/:id                | GET    | Get a question by ID    |
-| /api/questions/:id                | PUT    | Update a question by ID |
-| /api/questions/:id                | DELETE | Delete a question by ID |
-| /api/responses                    | GET    | Get all responses       |
-| /api/suveys/:id/responses         | POST   | Create a new response   |
-| /api/surveys/:id/responses        | GET    | Get a survey responses  |
-| /api/responses/:id                | PUT    | Update a response by ID |
-| /api/responses/:id                | DELETE | Delete a response by ID |
-| /api/surveys/:id/responses/export | DELETE | Export to excel file    |
+| Endpoint                          | Method | Description              |
+| --------------------------------- | ------ | ------------------------ |
+| /api/auth/signup                  | POST   | Register a new user      |
+| /api/auth/signin                  | POST   | Log in an existing user  |
+| /api/auth/me                      | POST   | Get current user         |
+| /api/surveys                      | GET    | Get all user surveys     |
+| /api/surveys                      | POST   | Create a new survey      |
+| /api/surveys/:id                  | GET    | Get a survey by ID       |
+| /api/surveys/:id                  | PUT    | Update a survey by ID    |
+| /api/surveys/:id                  | DELETE | Delete a survey by ID    |
+| /api/questions/:id                | GET    | Get a question by ID     |
+| /api/questions/:id                | PUT    | Update a question by ID  |
+| /api/questions/:id                | DELETE | Delete a question by ID  |
+| /api/responses                    | GET    | Get all responses        |
+| /api/suveys/:id/responses         | POST   | Create a new response    |
+| /api/surveys/:id/responses        | GET    | Get a survey responses   |
+| /api/responses/:id                | PUT    | Update a response by ID  |
+| /api/responses/:id                | DELETE | Delete a response by ID  |
+| /api/surveys/:id/responses/export | DELETE | Export data with exceljs |
 
 ## Contributing
 
