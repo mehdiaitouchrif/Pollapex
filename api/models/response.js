@@ -16,6 +16,15 @@ const ResponseSchema = new mongoose.Schema({
     required: true,
   },
   answers: [{ type: AnswerSchema }],
+  submittedAt: {
+    type: Date,
+    default: Date.now(),
+  },
+  meta: {
+    location: { type: String },
+    ipAddress: { type: String },
+    userAgent: { type: String },
+  },
 });
 
 const Response = mongoose.model("Response", ResponseSchema);
