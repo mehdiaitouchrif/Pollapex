@@ -5,6 +5,7 @@ const {
   getSurveyById,
   updateSurvey,
   deleteSurvey,
+  getSurveyAnalytics,
 } = require("../controllers/survey");
 const { protect } = require("../middleware/auth");
 const { createSurveyValidator } = require("../middleware/validators");
@@ -22,5 +23,7 @@ router
   .get(getSurveyById)
   .put(protect, updateSurvey)
   .delete(protect, deleteSurvey);
+
+router.get("/:id/analytics", protect, getSurveyAnalytics);
 
 module.exports = router;

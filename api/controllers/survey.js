@@ -1,6 +1,7 @@
 const Survey = require("../models/survey");
 const Question = require("../models/question");
 const User = require("../models/user");
+const Response = require("../models/response");
 
 // @desc    Get surveys
 // @route   GET /api/surveys
@@ -142,6 +143,66 @@ exports.deleteSurvey = async (req, res, next) => {
     await survey.deleteOne();
     res.status(204).send();
   } catch (error) {
+    next(error);
+  }
+};
+
+exports.getSurveyAnalytics = async (req, res, next) => {
+  try {
+    const surveyId = req.params.id;
+
+    const survey = await Survey.findById(surveyId).populate("questions");
+    if (!survey) {
+      const error = new Error("Survey not found");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    const responses = await Response.find({ survey: surveyId }).populate(
+      "answers.question"
+    );
+
+    const questionAnalytics = {};
+
+    for (const question of survey.questions) {
+      questionAnalytics[question._id] = {
+        question: question.question,
+        type: question.type,
+        data: {},
+        totalCount: 0,
+      };
+    }
+
+    for (const response of responses) {
+      for (const answer of response.answers) {
+        const questionId = answer.question._id.toString();
+        const value = answer.answer;
+
+        if (!questionAnalytics[questionId].data[value]) {
+          questionAnalytics[questionId].data[value] = {
+            count: 0,
+            percentage: 0,
+          };
+        }
+        questionAnalytics[questionId].data[value].count++;
+        questionAnalytics[questionId].totalCount++;
+      }
+    }
+
+    // Calculate percentage for each answer
+    for (const questionId in questionAnalytics) {
+      for (const value in questionAnalytics[questionId].data) {
+        const count = questionAnalytics[questionId].data[value].count;
+        const totalCount = questionAnalytics[questionId].totalCount;
+
+        questionAnalytics[questionId].data[value].percentage =
+          (count / totalCount) * 100;
+      }
+    }
+
+    return res.json({ success: true, data: questionAnalytics });
+  } catch (error) {
+    console.error(error);
     next(error);
   }
 };
