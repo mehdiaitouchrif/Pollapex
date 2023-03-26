@@ -6,7 +6,6 @@ const Survey = require("../models/survey");
 // @route   POST /api/surveys/:id/responses
 exports.submitResponse = async (req, res, next) => {
   const { id: surveyId } = req.params;
-
   try {
     const survey = await Survey.findById(surveyId).populate({
       path: "questions",
@@ -16,7 +15,7 @@ exports.submitResponse = async (req, res, next) => {
       throw new Error("Survey not found");
     }
 
-    const answers = req.body;
+    const { answers, meta } = req.body;
 
     // Check if required questions have been answered
     const requiredQuestions = survey.questions.filter(
@@ -36,6 +35,7 @@ exports.submitResponse = async (req, res, next) => {
     const response = await Response.create({
       survey,
       answers,
+      meta,
     });
 
     return res.status(201).json({ success: true, data: response });

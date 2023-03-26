@@ -1,5 +1,6 @@
 const Survey = require("../models/survey");
 const Question = require("../models/question");
+const User = require("../models/user");
 
 // @desc    Get surveys
 // @route   GET /api/surveys
@@ -38,13 +39,23 @@ exports.getSurveyById = async (req, res, next) => {
 // @route   POST /api/surveys
 exports.createSurvey = async (req, res, next) => {
   try {
-    const { title, description, backgroundImage, theme, questions } = req.body;
+    const {
+      title,
+      description,
+      backgroundImage,
+      theme,
+      questions,
+      active,
+      published,
+    } = req.body;
     const survey = new Survey({
       title,
       description,
       owner: req.user._id,
       backgroundImage,
       theme,
+      active,
+      published,
       questions: await Question.insertMany(questions),
     });
     await survey.save();
@@ -67,16 +78,23 @@ exports.updateSurvey = async (req, res, next) => {
       theme,
       customTheme,
       questions,
+      active,
+      published,
     } = req.body;
     const update = {};
 
     if (title) update.title = title;
     if (description) update.description = description;
-    if (collaborators) update.collaborators = collaborators;
+    if (collaborators)
+      update.collaborators = await User.find({
+        email: { $in: [...collaborators] },
+      }).select("_id");
     if (backgroundImage) update.backgroundImage = backgroundImage;
     if (theme) update.theme = theme;
     if (customTheme) update.customTheme = customTheme;
     if (questions) update.questions = await Question.insertMany(questions);
+    if (active) update.active = active;
+    if (published) update.published = published;
 
     // Verify user is owner or collaborator
     const survey = await Survey.findOne({ _id: id })

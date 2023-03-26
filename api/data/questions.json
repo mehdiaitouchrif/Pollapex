@@ -1,0 +1,107 @@
+[
+  {
+    "_id": "641f6e6323a50619ba9b459a",
+    "question": "How satisfied are you with your current job?",
+    "optional": false,
+    "type": "rating",
+    "choices": []
+  },
+  {
+    "_id": "641f6e6323a50619ba9b459b",
+    "question": "Do you feel valued by the company?",
+    "optional": false,
+    "type": "singleChoice",
+    "choices": ["Yes", "No"]
+  },
+  {
+    "_id": "641f6e6323a50619ba9b459c",
+    "question": "What is your favorite part of your job?",
+    "optional": true,
+    "type": "text",
+    "choices": []
+  },
+  {
+    "_id": "641f6e6323a50619ba9b459d",
+    "question": "What is your least favorite part of your job?",
+    "optional": true,
+    "type": "text",
+    "choices": []
+  },
+  {
+    "_id": "641f6f4f23a50619ba9b45a2",
+    "question": "How",
+    "optional": false,
+    "type": "rating",
+    "choices": []
+  },
+  {
+    "_id": "641f6f4f23a50619ba9b45a3",
+    "question": "Do you feel valued by the company?",
+    "optional": false,
+    "type": "singleChoice",
+    "choices": ["Yes", "No"]
+  },
+  {
+    "_id": "641f6f4f23a50619ba9b45a4",
+    "question": "What is your favorite part of your job?",
+    "optional": true,
+    "type": "text",
+    "choices": []
+  },
+  {
+    "_id": "641f6f4f23a50619ba9b45a5",
+    "question": "What is your least favorite part of your job?",
+    "optional": true,
+    "type": "text",
+    "choices": []
+  },
+  {
+    "_id": "641f7ad723a50619ba9b45bb",
+    "question": "How likely are you to recommend our products to a friend?",
+    "optional": false,
+    "type": "rating",
+    "choices": []
+  },
+  {
+    "_id": "641f7ad723a50619ba9b45bc",
+    "question": "Which of our products have you purchased?",
+    "optional": false,
+    "type": "multipleChoice",
+    "choices": ["Product A", "Product B", "Product C"]
+  },
+  {
+    "_id": "641f7ad723a50619ba9b45bd",
+    "question": "What is your overall impression of our customer service?",
+    "optional": false,
+    "type": "singleChoice",
+    "choices": ["Excellent", "Good", "Fair", "Poor"]
+  },
+  {
+    "_id": "641f7ad723a50619ba9b45be",
+    "question": "What can we do to improve our products or services?",
+    "optional": false,
+    "type": "paragraph",
+    "choices": []
+  },
+  {
+    "_id": "641f7aea23a50619ba9b45c3",
+    "question": "How often do you purchase products in this category?",
+    "optional": false,
+    "type": "singleChoice",
+    "choices": ["Daily", "Weekly", "Monthly", "Yearly"]
+  },
+  {
+    "_id": "641f7aea23a50619ba9b45c4",
+    "question": "Which of the following features are important to you when choosing a product in this category?",
+    "optional": false,
+    "type": "multipleChoice",
+    "choices": ["Price", "Quality", "Brand", "Convenience"]
+  },
+  {
+    "_id": "641f7aea23a50619ba9b45c5",
+    "question": "How much are you willing to pay for a high-quality product in this category?",
+    "optional": false,
+    "type": "rating",
+    "choices": []
+  }
+]

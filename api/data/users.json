@@ -1,0 +1,20 @@
+[
+  {
+    "_id": "641f6dc823a50619ba9b4597",
+    "email": "john.doe@example.com",
+    "password": "$2b$10$pEdTXjdah6/4U.Zaaqh6wOqacYCnDnR23joJ9/hmtD9vQngR1Mzvy",
+    "name": "John Doe"
+  },
+  {
+    "_id": "641f89ef88c613343ee9b62f",
+    "email": "sarah.smith@example.com",
+    "password": "$2b$10$75PYbvfXZkTwnxaYhdumvOv8TaX26wuHbCKg9yXf5WN.vu45T3lTy",
+    "name": "Sarah Smith"
+  },
+  {
+    "_id": "641f8a0288c613343ee9b631",
+    "email": "mehdi.aitouchrif@example.com",
+    "password": "$2b$10$oOX3HQuV.qkuGtV12vmJHOSFHmM3KFCdZ0bROy/FRYbcqFbsaw8vO",
+    "name": "Mehdi Ait Ouchrif"
+  }
+]

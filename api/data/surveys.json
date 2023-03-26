@@ -1,0 +1,52 @@
+[
+  {
+    "_id": "641f6e6323a50619ba9b459f",
+    "title": "Employee Satisfaction Survey",
+    "description": "This survey is used to gather feedback from employees about their job satisfaction.",
+    "owner": "641f6dc823a50619ba9b4597",
+    "collaborators": ["641f8a0288c613343ee9b631", "641f89ef88c613343ee9b62f"],
+    "questions": [
+      "641f6e6323a50619ba9b459a",
+      "641f6e6323a50619ba9b459b",
+      "641f6e6323a50619ba9b459c",
+      "641f6e6323a50619ba9b459d"
+    ],
+    "backgroundImage": "https://example.com/background.jpg",
+    "theme": "custom",
+    "active": false,
+    "published": false
+  },
+  {
+    "_id": "641f7ad723a50619ba9b45c0",
+    "title": "Customer Feedback Survey",
+    "description": "This survey is used to gather feedback from customers about our products and services.",
+    "owner": "641f6dc823a50619ba9b4597",
+    "collaborators": [],
+    "questions": [
+      "641f7ad723a50619ba9b45bb",
+      "641f7ad723a50619ba9b45bc",
+      "641f7ad723a50619ba9b45bd",
+      "641f7ad723a50619ba9b45be"
+    ],
+    "backgroundImage": "https://example.com/background2.jpg",
+    "theme": "dark",
+    "active": true,
+    "published": true
+  },
+  {
+    "_id": "641f7aea23a50619ba9b45c7",
+    "title": "Market Research Survey",
+    "description": "This survey is used to gather information about market trends and consumer preferences.",
+    "owner": "641f6dc823a50619ba9b4597",
+    "collaborators": [],
+    "questions": [
+      "641f7aea23a50619ba9b45c3",
+      "641f7aea23a50619ba9b45c4",
+      "641f7aea23a50619ba9b45c5"
+    ],
+    "backgroundImage": "https://example.com/background3.jpg",
+    "theme": "blue",
+    "active": true,
+    "published": true
+  }
+]
