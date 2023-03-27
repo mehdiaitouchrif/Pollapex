@@ -1,5 +1,7 @@
+const jwt = require("jsonwebtoken");
 const User = require("../models/user");
-const { connectDB, closeDB, clearDB } = require("./setup");
+const { JwtSecret } = require("../config");
+const { connectDB, closeDB, clearDB } = require("./setup/index");
 
 describe("User model", () => {
   beforeAll(async () => {
@@ -40,6 +42,19 @@ describe("User model", () => {
 
     const noMatch = await user.matchPasswords("wrongpassword");
     expect(noMatch).toBe(false);
+  });
+
+  it("should sign a JWT token", async () => {
+    const user = await User.create({
+      name: "John Doe",
+      email: "john@example.com",
+      password: "password123",
+    });
+
+    const token = user.getSignedJwtToken();
+    const decoded = jwt.verify(token, JwtSecret);
+
+    expect(decoded.id).toBe(user.id);
   });
 
   it("should fail to save if email is not provided", async () => {
