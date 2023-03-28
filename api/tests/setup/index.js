@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 // Connect to the test database
 const connectDB = async () => {
-  const url = "mongodb://localhost:27017/test";
+  const url = process.env.TEST_DATABASE_URI;
   await mongoose.connect(url);
 };
 
