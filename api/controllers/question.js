@@ -1,5 +1,15 @@
 const Question = require("../models/question");
 
+// Create a question
+exports.createQuestion = async (req, res, next) => {
+  try {
+    const question = await Question.create(req.body);
+    res.status(201).json({ success: true, data: question });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // Get a single question by ID
 exports.getQuestionById = async (req, res, next) => {
   try {
