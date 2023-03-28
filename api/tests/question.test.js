@@ -1,6 +1,6 @@
 const request = require("supertest");
 const app = require("../server");
-const { connectDB, closeDB, clearDB } = require("./setup");
+const { connectDB, closeDB } = require("./setup");
 
 describe("Question Controllers", () => {
   let token;

@@ -4,7 +4,7 @@ const { connectDB, closeDB, clearDB } = require("./setup/index");
 const app = require("../server");
 
 // Use a separate database for this test file
-process.env.TEST_DATABASE_URI = "mongodb://localhost:27017/question-test";
+process.env.TEST_DATABASE_URI = "mongodb://localhost:27017/auth-test";
 
 beforeAll(async () => {
   await connectDB();
