@@ -2,6 +2,7 @@ const request = require("supertest");
 const mongoose = require("mongoose");
 const app = require("../server");
 const { connectDB, closeDB, clearDB } = require("./setup");
+const Survey = require("../models/survey");
 
 // Use a separate database for this test file
 process.env.TEST_DATABASE_URI = "mongodb://localhost:27017/survey-test";
@@ -150,6 +151,25 @@ describe("Survey Controllers", () => {
       expect(res.body.survey.title).toBe("Updated Test Survey");
     });
 
+    it("should not update a survey if the user is not the owner or collaborator", async () => {
+      const user = await request(app).post("/api/auth/signup").send({
+        name: "Test User",
+        email: "testuser@example.com",
+        password: "password",
+      });
+      _token = user.body.token;
+
+      const res = await request(app)
+        .put(`/api/surveys/${surveyId}`)
+        .set("Authorization", `Bearer ${_token}`)
+        .send({
+          title: "New Title",
+        })
+        .expect(403);
+
+      expect(res.body.errors[0].msg).toBe("Unauthorized");
+    });
+
     it("should return a 404 error if the survey does not exist", async () => {
       const res = await request(app)
         .put(`/api/surveys/${new mongoose.Types.ObjectId()}`)
@@ -160,6 +180,27 @@ describe("Survey Controllers", () => {
         .expect(404);
 
       expect(res.body.errors[0].msg).toBe("Survey not found");
+    });
+  });
+
+  describe("deleteSurvey", () => {
+    it("should delete an existing survey", async () => {
+      const response = await request(app)
+        .delete(`/api/surveys/${surveyId}`)
+        .set("Authorization", `Bearer ${token}`)
+        .expect(204);
+
+      // Make sure survey is deleted
+      const survey = await Survey.findOne({ _id: surveyId });
+      expect(survey).toBeNull();
+    });
+
+    it("should return 404 if survey does not exist", async () => {
+      const invalidId = "123456789012345678901234"; // Invalid ObjectId
+      const response = await request(app)
+        .delete(`/api/surveys/${invalidId}`)
+        .set("Authorization", `Bearer ${token}`)
+        .expect(404);
     });
   });
 });
