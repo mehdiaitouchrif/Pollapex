@@ -27,7 +27,9 @@ exports.submitResponse = async (req, res, next) => {
     );
     if (unansweredQuestions.length > 0) {
       unansweredQuestions.map(({ question }) => {
-        throw new Error(`"${question}" is required`);
+        const error = new Error(`"${question}" is required`);
+        error.statusCode = 400;
+        throw error;
       });
     }
 
