@@ -14,7 +14,7 @@ exports.sendTokenResponse = (user, statusCode, res) => {
     res
       .status(statusCode)
       .cookie("token", token, options)
-      .json({ success: true, token });
+      .json({ success: true, token, user });
   } catch (error) {
     console.error("Error generating token", error);
     res.status(500).json({ success: false, error: "Error generating token" });

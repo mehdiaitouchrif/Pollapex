@@ -47,3 +47,20 @@ exports.signin = async (req, res, next) => {
 exports.getMe = async (req, res) => {
   res.status(200).json({ success: true, data: req.user });
 };
+
+//@desc  Find user
+//@route GET /api/auth/:email
+exports.findUser = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.params.email });
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    return res.status(200).json({ success: true, user });
+  } catch (error) {
+    next(error);
+  }
+};
