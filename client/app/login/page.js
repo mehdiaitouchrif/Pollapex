@@ -2,16 +2,28 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const onSubmit = (event) => {
-    // handle submit
-
-    console.log(email, password);
+  const onSubmit = async (event) => {
     event.preventDefault();
+
+    // handle submit
+    const result = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    if (result.error) {
+      JSON.parse(result.error).map((err) => toast.error(err.msg));
+    } else {
+      window.location = "dashboard";
+    }
   };
 
   return (
@@ -65,7 +77,6 @@ const Login = () => {
         </div>
       </form>
 
-      <hr />
       <p className='text-center text-gray-400 mt-2 text-sm'>
         Don{"'"}t have an account?{" "}
         <Link className='text-gray-500 underline' href='/signup'>

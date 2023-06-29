@@ -4,7 +4,7 @@ import { FaShare, FaChartBar, FaFileExport, FaPlus } from "react-icons/fa";
 import Header from "./components/header";
 import Footer from "./components/footer";
 
-const Home = () => {
+const Home = async () => {
   return (
     <main>
       <Header />
@@ -34,7 +34,7 @@ const Home = () => {
           <p className='text-2xl'>
             Get more <span className='font-bold'>data—like</span>, feedback,
             conduct studies, and anything
-            <span className='font-bold'>else—with</span> Pollapex effortlessly.
+            <span className='font-bold'> else—with</span> Pollapex effortlessly.
           </p>
           <Link
             className='inline-block my-6 font-semibold rounded-xl py-3 px-6 bg-black text-white hover:shadow-lg hover:bg-gray-900 hover:duration-150 hover:ease-in-out'
@@ -65,53 +65,55 @@ const Home = () => {
             </Link>
           </div>
 
-          <div class='col-span-2 flex flex-wrap md:mt-auto gap-y-8'>
-            <div class='w-full sm:w-1/2 px-4 mb-8'>
+          <div className='col-span-2 flex flex-wrap md:mt-auto md:pl-12 gap-y-8'>
+            <div className='w-full sm:w-1/2 px-4 mb-8'>
               <div className='p-4 mb-4 rounded-2xl bg-yellow-50 w-fit'>
                 <FaPlus size={40} color='#346c66' />
               </div>
-              <h3 class='text-lg font-semibold mb-2'>
+              <h3 className='text-lg font-semibold mb-2'>
                 Create Unlimited Surveys
               </h3>
-              <p class='text-gray-600'>
+              <p className='text-gray-600'>
                 Effortlessly generate as many surveys as you need to gather
                 valuable insights from your audience. No limitations or
                 restrictions.
               </p>
             </div>
 
-            <div class='w-full sm:w-1/2 px-4 mb-8'>
+            <div className='w-full sm:w-1/2 px-4 mb-8'>
               <div className='p-4 mb-4 rounded-2xl bg-yellow-50 w-fit'>
                 <FaShare size={40} color='#346c66' />
               </div>
-              <h3 class='text-lg font-semibold mb-2'>Easily Share surveys</h3>
-              <p class='text-gray-600'>
+              <h3 className='text-lg font-semibold mb-2'>
+                Easily Share surveys
+              </h3>
+              <p className='text-gray-600'>
                 Easily distribute your surveys by sharing a unique URL with your
                 participants. Reach audiences and collect responses
                 conveniently.
               </p>
             </div>
-            <div class='w-full sm:w-1/2 px-4 mb-8'>
+            <div className='w-full sm:w-1/2 px-4 mb-8'>
               <div className='p-4 mb-4 rounded-2xl bg-yellow-50 w-fit'>
                 <FaChartBar size={40} color='#346c66' />
               </div>
-              <h3 class='text-lg font-semibold mb-2'>
+              <h3 className='text-lg font-semibold mb-2'>
                 Collect and visualize responses
               </h3>
-              <p class='text-gray-600'>
+              <p className='text-gray-600'>
                 Gather responses from your surveys and gain valuable insights.
                 Effortlessly visualize data to understand trends, and make
                 informed decisions.
               </p>
             </div>
-            <div class='w-full sm:w-1/2 px-4 mb-8'>
+            <div className='w-full sm:w-1/2 px-4 mb-8'>
               <div className='p-4 mb-4 rounded-2xl bg-yellow-50 w-fit'>
                 <FaFileExport size={40} color='#346c66' />
               </div>
-              <h3 class='text-lg font-semibold mb-2'>
+              <h3 className='text-lg font-semibold mb-2'>
                 Export your data anywhere
               </h3>
-              <p class='text-gray-600'>
+              <p className='text-gray-600'>
                 Seamlessly export your survey data to various formats and
                 integrate it with other tools or systems. Take your data with
                 you wherever you need it.

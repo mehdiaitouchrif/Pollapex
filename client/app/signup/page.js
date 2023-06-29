@@ -2,17 +2,52 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
+import { useSearchParams } from "next/navigation";
 
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const onSubmit = (event) => {
-    // handle submit
+  const searchParams = useSearchParams();
+  let callbackUrl =
+    searchParams.get("callbackUrl") || "http://localhost:3000/dashboard";
 
-    console.log(name, email, password);
+  const onSubmit = async (event) => {
     event.preventDefault();
+
+    if (!name) {
+      toast.error("Please enter your name");
+      return;
+    }
+    if (!email) {
+      toast.error("Please enter your email");
+      retur;
+    }
+    if (!password) {
+      toast.error("Please enter a password");
+      return;
+    }
+
+    // handle submit
+    const res = await fetch("/api/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, password }),
+    });
+    const data = await res.json();
+    if (data.errors) {
+      data.errors.map((err) => toast.error(err.msg));
+    } else if (data.success) {
+      await signIn("credentials", {
+        email,
+        password,
+        redirect: true,
+        callbackUrl,
+      });
+    }
   };
   return (
     <>
@@ -48,7 +83,7 @@ const Signup = () => {
             <input
               className='shadow appearance-none border border-gray-400 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
               id='name'
-              type='email'
+              type='text'
               value={name}
               onChange={(event) => setName(event.target.value)}
               placeholder='Zenitsu Agatsuma'
