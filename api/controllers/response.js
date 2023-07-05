@@ -75,21 +75,38 @@ exports.editResponse = async (req, res, next) => {
 exports.getResponses = async (req, res, next) => {
   const { id: surveyId } = req.params;
 
-  try {
-    const survey = await Survey.findById(surveyId);
-    if (!survey) {
-      const error = new Error("Survey not found");
-      error.statusCode = 404;
-      throw error;
+  if (surveyId) {
+    // Get specific survey responses
+    try {
+      const survey = await Survey.findById(surveyId);
+      if (!survey) {
+        const error = new Error("Survey not found");
+        error.statusCode = 404;
+        throw error;
+      }
+
+      const responses = await Response.find({ survey: surveyId }).populate({
+        path: "answers.question",
+        select: "question",
+      });
+      res.status(200).json({ success: true, data: responses });
+    } catch (error) {
+      next(error);
+    }
+  } else {
+    let limit = null;
+    if (req.query.limit) {
+      limit = parseInt(req.query.limit);
     }
 
-    const responses = await Response.find({ survey: surveyId }).populate({
-      path: "answers.question",
-      select: "question",
-    });
-    res.status(200).json({ success: true, data: responses });
-  } catch (error) {
-    next(error);
+    let query = Response.find().populate({ path: "survey", select: "title" });
+
+    if (limit) {
+      query = query.limit(limit);
+    }
+
+    const responses = await query.exec();
+    return res.status(200).json({ success: true, data: responses });
   }
 };
 
