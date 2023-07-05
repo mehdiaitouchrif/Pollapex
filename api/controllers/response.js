@@ -99,7 +99,14 @@ exports.getResponses = async (req, res, next) => {
       limit = parseInt(req.query.limit);
     }
 
-    let query = Response.find().populate({ path: "survey", select: "title" });
+    loggedInUser = req.user._id.toString();
+    const surveys = await Survey.find({ owner: loggedInUser }).select("_id");
+    const surveyIds = surveys.map((survey) => survey._id);
+
+    let query = Response.find({ survey: { $in: surveyIds } }).populate({
+      path: "survey",
+      select: "title owner",
+    });
 
     if (limit) {
       query = query.limit(limit);
