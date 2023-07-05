@@ -7,10 +7,21 @@ const Response = require("../models/response");
 // @route   GET /api/surveys
 exports.getSurveysByUser = async (req, res, next) => {
   try {
-    const surveys = await Survey.find({ owner: req.user._id })
+    let limit = null;
+    if (req.query.limit) {
+      limit = parseInt(req.query.limit);
+    }
+
+    let query = Survey.find({ owner: req.user._id })
       .populate("owner", "-password")
       .populate("collaborators", "-password")
       .populate("questions");
+
+    if (limit) {
+      query = query.limit(limit);
+    }
+
+    const surveys = await query.exec();
     res.status(200).json({ success: true, data: surveys });
   } catch (error) {
     next(error);
