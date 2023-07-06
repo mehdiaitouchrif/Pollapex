@@ -103,10 +103,12 @@ exports.getResponses = async (req, res, next) => {
     const surveys = await Survey.find({ owner: loggedInUser }).select("_id");
     const surveyIds = surveys.map((survey) => survey._id);
 
-    let query = Response.find({ survey: { $in: surveyIds } }).populate({
-      path: "survey",
-      select: "title owner",
-    });
+    let query = Response.find({ survey: { $in: surveyIds } })
+      .sort({ submittedAt: -1 })
+      .populate({
+        path: "survey",
+        select: "title owner",
+      });
 
     if (limit) {
       query = query.limit(limit);
