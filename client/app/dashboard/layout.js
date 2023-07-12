@@ -8,7 +8,7 @@ const DashboardLayout = ({ children }) => {
   return (
     <>
       <Header />
-      {children}
+      <div className='bg-gray-50'>{children}</div>
     </>
   );
 };

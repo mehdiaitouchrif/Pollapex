@@ -17,6 +17,7 @@ export const authOptions = {
 
         const data = await res.json();
         if (res.ok) {
+          data.user.token = data.token;
           return data.user;
         } else {
           throw new Error(JSON.stringify(data.errors));
@@ -24,11 +25,17 @@ export const authOptions = {
       },
     }),
   ],
-  session: {
-    strategy: "jwt",
-  },
   pages: {
     signIn: "/login",
+  },
+  callbacks: {
+    async jwt({ token, user }) {
+      return { ...token, ...user };
+    },
+    async session({ session, token, user }) {
+      session.user = token;
+      return session;
+    },
   },
 };
 
