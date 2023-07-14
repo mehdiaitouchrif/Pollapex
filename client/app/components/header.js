@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 
 import { Lora } from "next/font/google";
 
@@ -14,8 +13,8 @@ const Header = () => {
   const { data: session } = useSession();
 
   return (
-    <nav className='p-6 lg:px-24 flex items-center container mx-auto'>
-      <Link href='/' className='hover:shadow-inner'>
+    <nav className='p-4 lg:px-24 flex items-center container mx-auto'>
+      <Link href='/'>
         <h1 className={`text-3xl font-semibold  ${inter.className}`}>
           Pollapex
         </h1>
