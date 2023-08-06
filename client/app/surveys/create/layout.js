@@ -7,7 +7,7 @@ export const metadata = {
 const Layout = ({ children }) => {
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <div className='bg-gray-50'>{children}</div>
     </>
   );
