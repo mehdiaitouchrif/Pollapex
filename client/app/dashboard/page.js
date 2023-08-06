@@ -7,6 +7,7 @@ import SurveyBox from "../components/surveyBox";
 import CreateSurveyBox from "../components/createSurveyBox";
 import { BsBoxArrowUpRight } from "react-icons/bs";
 import SkeletonBox from "../components/skeleton";
+import { timeAgo } from "../utils/helpers";
 
 const Dashboard = () => {
   const { data: session } = useSession({
@@ -118,8 +119,7 @@ const Dashboard = () => {
                           Response #{idx + 1} on {response.survey?.title}
                         </h4>
                         <p className='mb-2 text-sm text-gray-400'>
-                          Completed on{" "}
-                          {new Date(response.submittedAt).toLocaleString()}{" "}
+                          Completed {timeAgo(response.submittedAt)}
                         </p>
                       </div>
 

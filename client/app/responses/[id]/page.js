@@ -12,6 +12,7 @@ import {
 import {
   capitalizeString,
   getBrowserName,
+  timeAgo,
   trimIdToSixChars,
 } from "@/app/utils/helpers";
 
@@ -64,7 +65,7 @@ const SingleResponse = async ({ params: { id } }) => {
               <span className='text-gray-600 font-semibold'>
                 {response.survey.title}
               </span>{" "}
-              on {response.submittedAt}
+              {timeAgo(response.submittedAt)}
             </p>
 
             {response.meta && (
