@@ -123,7 +123,10 @@ exports.getResponses = async (req, res, next) => {
 // @route GET /api/responses/:id
 exports.getResponse = async (req, res, next) => {
   try {
-    const response = await Response.findById(req.params.id);
+    const response = await Response.findById(req.params.id).populate({
+      path: "answers.question survey",
+      select: "question type title",
+    });
     if (!response) {
       const error = new Error("Response not found");
       error.statusCode = 404;
