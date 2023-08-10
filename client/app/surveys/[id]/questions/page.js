@@ -124,14 +124,13 @@ const QuestionsPage = ({ params: { id } }) => {
                   <div className='flex items-center gap-4'>
                     <Link
                       className='rounded-lg shodow py-2 px-4 border border-gray-200 hover:bg-gray-50 duration-150 ease-in-out'
-                      href={`/surveys/${id}/edit-question/${question._id}`}
+                      href={`/surveys/${id}/questions/${question._id}`}
                     >
                       Edit
                     </Link>
                     <button
                       onClick={() => deleteQuestion(question._id)}
                       className='inline-block rounded-lg shodow py-3 px-4 border bg-red-50 border-red-100 shadow hover:bg-red-100 duration-150 ease-in-out'
-                      href={`/surveys/${id}/edit-question/${question._id}`}
                     >
                       <FaTrash size={18} className='text-red-400' />
                     </button>
