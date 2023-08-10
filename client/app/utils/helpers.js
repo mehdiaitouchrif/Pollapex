@@ -8,6 +8,17 @@ export function capitalizeString(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+export function camelCaseToTitleCase(inputString) {
+  if (inputString) {
+    const wordsArray = inputString.split(/(?=[A-Z])/);
+
+    wordsArray[0] = wordsArray[0][0].toUpperCase() + wordsArray[0].substring(1);
+
+    return wordsArray.join(" ");
+  }
+  return;
+}
+
 export function getBrowserName(userAgent) {
   userAgent = userAgent.toLowerCase();
 
