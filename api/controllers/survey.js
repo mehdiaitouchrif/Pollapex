@@ -21,6 +21,7 @@ exports.getSurveysByUser = async (req, res, next) => {
       query = query.limit(limit);
     }
 
+    query = query.sort({ createdAt: -1 });
     const surveys = await query.exec();
     res.status(200).json({ success: true, data: surveys });
   } catch (error) {
