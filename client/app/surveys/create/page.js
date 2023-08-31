@@ -1,26 +1,122 @@
 "use client";
-import QuestionComposer from "@/app/components/questionComponents/questionComposer";
+import Question from "@/app/components/questionComponents/question";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 import { FaPlus } from "react-icons/fa";
+import { useSession } from "next-auth/react";
 
 const CreateSurveyPage = () => {
+  // Auth
+  const { data: session } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect(`/login?callbackUrl=/surveys/${id}/questions/${questionId}`);
+    },
+  });
+
+  // Survey state
   const [survey, setSurvey] = useState({
     title: "",
     description: "",
-    theme: "blue",
-    active: false,
-    published: false,
-    backgroundImage: "",
-    collaborators: [],
-    questions: [],
+    questions: [
+      {
+        question: "Default exemplar question",
+        type: "multipleChoice",
+        optional: false,
+        choices: ["Option 1", "Option 2"],
+      },
+    ],
   });
 
+  // Handle survey form
   const handleChange = (e) => {
     setSurvey((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleDuplicate = (data) => {
-    alert("todo soon");
+  const addQuestion = () => {
+    const newQuestion = {
+      question: "",
+      type: "multipleChoice",
+      optional: false,
+      choices: [],
+    };
+    setSurvey((prevSurvey) => ({
+      ...prevSurvey,
+      questions: [...prevSurvey.questions, newQuestion],
+    }));
+  };
+
+  const handleQuestionChange = (index, field, value) => {
+    setSurvey((prevSurvey) => {
+      const updatedQuestions = [...prevSurvey.questions];
+      updatedQuestions[index][field] = value;
+      return { ...prevSurvey, questions: updatedQuestions };
+    });
+  };
+
+  const duplicateQuestion = (index) => {
+    setSurvey((prevSurvey) => {
+      const questionToDuplicate = { ...prevSurvey.questions[index] };
+      const updatedQuestions = [...prevSurvey.questions];
+      updatedQuestions.splice(index + 1, 0, questionToDuplicate);
+      return { ...prevSurvey, questions: updatedQuestions };
+    });
+  };
+
+  const deleteQuestion = (index) => {
+    setSurvey((prevSurvey) => {
+      const updatedQuestions = prevSurvey.questions.filter(
+        (_, i) => i !== index
+      );
+      return { ...prevSurvey, questions: updatedQuestions };
+    });
+  };
+
+  // Manage question choices (consumed in questionTypeRenderer / question)
+  const handleChoiceChange = (questionIndex, choiceIndex, value) => {
+    setSurvey((prevSurvey) => {
+      const updatedQuestions = [...prevSurvey.questions];
+      updatedQuestions[questionIndex].choices[choiceIndex] = value;
+      return { ...prevSurvey, questions: updatedQuestions };
+    });
+  };
+
+  const addChoice = (questionIndex) => {
+    setSurvey((prevSurvey) => {
+      const updatedQuestions = [...prevSurvey.questions];
+      updatedQuestions[questionIndex].choices.push(
+        `Option ${updatedQuestions[questionIndex].choices.length + 1}`
+      );
+      return { ...prevSurvey, questions: updatedQuestions };
+    });
+  };
+
+  const deleteChoice = (questionIndex, choiceIndex) => {
+    setSurvey((prevSurvey) => {
+      const updatedQuestions = [...prevSurvey.questions];
+      updatedQuestions[questionIndex].choices.splice(choiceIndex, 1);
+      return { ...prevSurvey, questions: updatedQuestions };
+    });
+  };
+
+  // Create the survey (finally)
+  const publishSurveyHandler = async () => {
+    const res = await fetch("http://localhost:5000/api/surveys", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${session?.user?.token}`,
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(survey),
+    });
+    console.log(survey);
+
+    await res.json();
+    if (res.ok) {
+      toast.success("Survey created successfully");
+    } else {
+      toast.error("Couldn't create the survey. Please try later");
+    }
   };
 
   return (
@@ -68,13 +164,33 @@ const CreateSurveyPage = () => {
       </div>
 
       {/* questions */}
-      <QuestionComposer handleDuplicate={handleDuplicate} />
+      {survey.questions.map((question, index) => (
+        <Question
+          key={index}
+          question={question}
+          index={index}
+          handleQuestionChange={handleQuestionChange}
+          duplicateQuestion={duplicateQuestion}
+          deleteQuestion={deleteQuestion}
+          handleChoiceChange={handleChoiceChange}
+          addChoice={addChoice}
+          deleteChoice={deleteChoice}
+        />
+      ))}
 
       <button
         style={{ top: "30%", right: "20%" }}
         className='inline-block fixed bg-white p-4 rounded-full shadow-lg border-2 border-transparent hover:border-2 hover:border-blue-500 focus:bg-none focus:outline-none'
+        onClick={addQuestion}
       >
         <FaPlus size={24} className='text-gray-600' />
+      </button>
+
+      <button
+        onClick={publishSurveyHandler}
+        className='inline-block mt-4 mb-10 py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg'
+      >
+        Create Survey
       </button>
     </div>
   );

@@ -1,11 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
 import { toast } from "react-hot-toast";
 import { redirect } from "next/navigation";
-import { returnQuestionJSX } from "@/app/utils/questions";
 import { camelCaseToTitleCase } from "@/app/utils/helpers";
+import GoBackLink from "@/app/components/GoBackLink";
 
 const EditQuestion = ({ params: { questionId } }) => {
   const { data: session } = useSession({
@@ -22,13 +21,13 @@ const EditQuestion = ({ params: { questionId } }) => {
   };
 
   const handleChoiceChange = (idx, newValue) => {
-    const newChoices = [...question.choices]; // Create a copy of the choices array
-    newChoices[idx] = newValue; // Update the choice at the specified index
-    setQuestion({ ...question, choices: newChoices }); // Update the state with the new choices array
+    const newChoices = [...question.choices];
+    newChoices[idx] = newValue;
+    setQuestion((prev) => ({ ...prev, choices: newChoices }));
   };
 
   const removeOption = (idx) => {
-    const choicesCopy = question?.choices;
+    const choicesCopy = [...question?.choices];
     choicesCopy.splice(idx, 1);
     setQuestion((prev) => ({ ...prev, choices: choicesCopy }));
   };
@@ -56,13 +55,20 @@ const EditQuestion = ({ params: { questionId } }) => {
     }
   };
 
+  const hideChoices = () => {
+    const acceptChoices = ["multipleChoice", "singleChoice"];
+    if (acceptChoices.includes(question?.type)) {
+      return;
+    }
+    return "hidden";
+  };
+
   useEffect(() => {
     const fetchQuestion = async () => {
       const res = await fetch(
         `http://localhost:5000/api/questions/${questionId}`
       );
       const { data } = await res.json();
-      console.log(data);
       setQuestion(data);
     };
 
@@ -71,6 +77,7 @@ const EditQuestion = ({ params: { questionId } }) => {
 
   return (
     <div className='max-w-4xl mx-auto p-4'>
+      <GoBackLink />
       <h2 className='text-3xl font-semibold my-4'>Edit Question </h2>
 
       <form
@@ -113,7 +120,7 @@ const EditQuestion = ({ params: { questionId } }) => {
               htmlFor='optional'
               className='text-sm text-gray-500 font-semibold mb-1'
             >
-              Can this question be skipped
+              Can this question be skipped?
             </label>
             <select
               type='text'
@@ -133,7 +140,7 @@ const EditQuestion = ({ params: { questionId } }) => {
           accurate.
         </p>
 
-        <div className='my-8'>
+        <div className={`my-8 ${hideChoices()}`}>
           <h4 className='font-semibold my-2'>Options</h4>
           <div>
             {question?.choices.map((choice, idx) => (
@@ -168,14 +175,6 @@ const EditQuestion = ({ params: { questionId } }) => {
           >
             Add another option
           </button>
-
-          <div className='my-8'>
-            <h4 className='my-2'>Question preview</h4>
-            <div className='bg-gray-50 border rounded-lg p-4'>
-              <p className='font-semibold mb-2'>{question?.question}</p>
-              {returnQuestionJSX(question?.type, question?.choices, true)}
-            </div>
-          </div>
         </div>
 
         <button
