@@ -1,9 +1,22 @@
 const Question = require("../models/question");
+const Survey = require("../models/survey");
 
 // Create a question
 exports.createQuestion = async (req, res, next) => {
   try {
     const question = await Question.create(req.body);
+    try {
+      const survey = await Survey.findById(req.body.surveyId);
+      if (!survey) {
+        const error = new Error("Survey not found");
+        error.statusCode = 404;
+        throw error;
+      }
+      survey.questions.push(question);
+      await survey.save();
+    } catch (err) {
+      console.log(err);
+    }
     res.status(201).json({ success: true, data: question });
   } catch (error) {
     next(error);

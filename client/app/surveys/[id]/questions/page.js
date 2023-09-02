@@ -139,6 +139,13 @@ const QuestionsPage = ({ params: { id } }) => {
               ))}
             </div>
           )}
+
+          <Link
+            className='inline-block py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg my-6'
+            href={`/surveys/${id}/add-question`}
+          >
+            Add a new question
+          </Link>
         </div>
       </div>
     </>

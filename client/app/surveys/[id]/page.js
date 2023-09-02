@@ -3,7 +3,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import SurveyOverview from "@/app/components/surveyOverview";
-import { capitalizeString } from "@/app/utils/helpers";
+import { camelCaseToTitleCase } from "@/app/utils/helpers";
 
 const SurveyPage = async ({ params: { id } }) => {
   const session = await getServerSession(authOptions);
@@ -64,7 +64,7 @@ const SurveyPage = async ({ params: { id } }) => {
                     Total respondants: {item.totalCount}
                   </p>
                   <p className='text-gray-500 text-sm'>
-                    Type: {capitalizeString(item.type)}{" "}
+                    Type: {camelCaseToTitleCase(item.type)}{" "}
                   </p>
                 </div>
                 <div>
