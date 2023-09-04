@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const cors = require("cors");
+const { protect } = require("./middleware/auth");
+const { generateStatistis } = require("./controllers/statistics");
 
 const app = express();
 
@@ -17,6 +19,7 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/surveys", require("./routes/survey"));
 app.use("/api/questions", require("./routes/question"));
 app.use("/api/responses", require("./routes/response"));
+app.get("/api/statistics", protect, generateStatistis);
 
 app.get("/api/hello", (req, res) => {
   res.status(200).json("Hello world");

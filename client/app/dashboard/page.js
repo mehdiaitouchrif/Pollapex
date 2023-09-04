@@ -8,7 +8,7 @@ import CreateSurveyBox from "../components/createSurveyBox";
 import { BsBoxArrowUpRight } from "react-icons/bs";
 import SkeletonBox from "../components/skeleton";
 import { timeAgo } from "../utils/helpers";
-import { fetchSurveys } from "../utils/apiUtils/surveys";
+import { fetchStatistics, fetchSurveys } from "../utils/apiUtils/surveys";
 import { fetchResponses } from "../utils/apiUtils/responses";
 
 const Dashboard = () => {
@@ -23,6 +23,9 @@ const Dashboard = () => {
   const [surveysLoading, setSurveysLoading] = useState(true);
   const [responses, setResponses] = useState(null);
   const [responsesLoading, setResponsesLoading] = useState(true);
+
+  const [statistics, setStatistics] = useState(null);
+  const [statisticsLoading, setStatisticsLoading] = useState(true);
 
   useEffect(() => {
     const user = session?.user;
@@ -48,6 +51,17 @@ const Dashboard = () => {
           console.error("Error fetching responses: ", error);
           setResponsesLoading(false);
         });
+
+      // Fetch statistics
+      fetchStatistics(user.token)
+        .then((data) => {
+          setStatistics(data);
+          setStatisticsLoading(false);
+        })
+        .catch((error) => {
+          setStatisticsLoading(false);
+          console.log(error);
+        });
     }
   }, [session]);
 
@@ -55,16 +69,64 @@ const Dashboard = () => {
     <div className='max-w-6xl mx-auto py-4 px-3 md:px-6'>
       <h2 className='text-3xl font-semibold my-4'>Dashboard</h2>
 
+      {statisticsLoading ? (
+        <div className='grid grid-cols-1 gap-y-4 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+          <SkeletonBox rowNumber={2} hideFull={true} />
+          <SkeletonBox rowNumber={2} hideFull={true} />
+          <SkeletonBox rowNumber={2} hideFull={true} />
+        </div>
+      ) : (
+        statistics && (
+          <div className='grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-4 mb-4 md:mb-8'>
+            <>
+              <div className='bg-white rounded-lg shadow border p-4 '>
+                <p className='text-sm text-gray-400 font-medium'>
+                  Surveys created
+                </p>
+                <h4 className='text-3xl my-2 font-semibold'>
+                  {statistics.totalSurveys}{" "}
+                </h4>
+              </div>
+              <div className='bg-white rounded-lg shadow border p-4'>
+                <p className='text-sm text-gray-400 font-medium'>
+                  Total responses
+                </p>
+                <h4 className='text-3xl my-2 font-semibold'>
+                  {statistics.totalResponses}
+                </h4>
+              </div>
+              <div className='bg-white rounded-lg shadow border p-4'>
+                <p className='text-sm text-gray-400 font-medium'>
+                  Average responses per survey
+                </p>
+
+                <h4 className='text-3xl my-2 font-semibold'>
+                  {statistics.averageResponsesPerSurvey}{" "}
+                </h4>
+              </div>
+              <div className='bg-white rounded-lg shadow border p-4'>
+                <p className='text-sm text-gray-400 font-medium'>
+                  Average response time{" "}
+                </p>
+                <h4 className='text-3xl my-2 font-semibold'>
+                  {statistics.averageResponseTime}{" "}
+                </h4>
+              </div>
+            </>
+          </div>
+        )
+      )}
+
       <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
         <div className='md:col-span-2 order-2 md:order-1'>
           <h2 className='text-2xl font-semibold my-4'>Recent surveys</h2>
 
           {/* Loading */}
           {surveysLoading && (
-            <>
+            <div className='flex flex-col gap-y-2'>
               <SkeletonBox />
               <SkeletonBox />
-            </>
+            </div>
           )}
 
           {/* Surveys */}

@@ -127,3 +127,23 @@ export async function publishOrDisableSurveyHandler(
     throw error;
   }
 }
+
+export async function fetchStatistics(userToken) {
+  try {
+    const response = await fetch(`${BACKEND_API_URL}/statistics`, {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to load statistics");
+    }
+
+    const { data } = await response.json();
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}

@@ -1,4 +1,4 @@
-const SkeletonBox = ({ styleClasses, rowNumber = 3 }) => {
+const SkeletonBox = ({ styleClasses, rowNumber = 3, hideFull = false }) => {
   return (
     <div
       role='status'
@@ -10,7 +10,11 @@ const SkeletonBox = ({ styleClasses, rowNumber = 3 }) => {
             <div className='h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 mb-2.5'></div>
             <div className='w-72 h-2 bg-gray-200 rounded-full dark:bg-gray-600'></div>
           </div>
-          <div className='h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-12'></div>
+          <div
+            className={`h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-12 ${
+              hideFull && "hidden"
+            }`}
+          ></div>
         </div>
       ))}
 
