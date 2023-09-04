@@ -9,7 +9,7 @@ exports.submitResponse = async (req, res, next) => {
   try {
     const survey = await Survey.findById(surveyId).populate({
       path: "questions",
-      select: "_id question",
+      select: "_id question optional",
     });
     if (!survey) {
       throw new Error("Survey not found");
