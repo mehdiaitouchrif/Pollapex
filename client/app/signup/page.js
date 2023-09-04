@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
+import { redirect } from "next/navigation";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -44,6 +45,14 @@ const Signup = () => {
       });
     }
   };
+
+  const { data: session } = useSession({});
+
+  useEffect(() => {
+    if (session?.user) {
+      redirect("/dashboard");
+    }
+  }, [session]);
 
   return (
     <>

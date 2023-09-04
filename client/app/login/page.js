@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { signIn, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useSearchParams } from "next/navigation";
+import { redirect } from "next/navigation";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -31,6 +32,14 @@ const Login = () => {
       window.location = "dashboard";
     }
   };
+
+  const { data: session } = useSession({});
+
+  useEffect(() => {
+    if (session?.user) {
+      redirect("/dashboard");
+    }
+  }, [session]);
 
   return (
     <div className='flex flex-col align-center max-w-xs mx-auto -mt-16 h-screen justify-center p-2'>
