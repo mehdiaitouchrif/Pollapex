@@ -21,7 +21,7 @@ const SurveyOverview = ({ id }) => {
 
   // Survey Public Link
   const [isCopied, setIsCopied] = useState(false);
-  const dynamicUrl = `${window.location.origin}/${id}`;
+  const [dynamicUrl, setDynamicUrl] = useState("");
 
   const handleCopy = async () => {
     try {
@@ -109,6 +109,9 @@ const SurveyOverview = ({ id }) => {
 
   // API requests
   useEffect(() => {
+    const url = `${window.location.origin}/${id}`;
+    setDynamicUrl(url);
+
     const fetchSurvey = async () => {
       try {
         const response = await fetch(

@@ -1,5 +1,5 @@
 "use client";
-import Question from "@/app/components/questionComponents/question";
+import Question from "@/app/components/question";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { FaPlus } from "react-icons/fa";
