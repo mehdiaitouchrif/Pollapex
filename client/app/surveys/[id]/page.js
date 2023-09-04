@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import SurveyOverview from "@/app/components/surveyOverview";
 import { camelCaseToTitleCase } from "@/app/utils/helpers";
+import { fetchSurveyAnalytics } from "@/app/utils/apiUtils/surveys";
 
 const SurveyPage = async ({ params: { id } }) => {
   const session = await getServerSession(authOptions);
@@ -11,21 +12,7 @@ const SurveyPage = async ({ params: { id } }) => {
     redirect(`/login?callbackUrl=/surveys/${id}`);
   }
 
-  async function fetchSurveyAnalytics() {
-    const response = await fetch(
-      `http://localhost:5000/api/surveys/${id}/analytics`,
-      {
-        headers: {
-          Authorization: `Bearer ${session.user.token}`,
-        },
-      }
-    );
-
-    const { data: analytics } = await response.json();
-    return analytics;
-  }
-
-  const analytics = await fetchSurveyAnalytics();
+  const analytics = await fetchSurveyAnalytics(session.user.token, id);
 
   return (
     <>

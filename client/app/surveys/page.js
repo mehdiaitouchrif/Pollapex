@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import SurveyBox from "../components/surveyBox";
 import CreateSurveyBox from "../components/createSurveyBox";
 import SkeletonBox from "../components/skeleton";
+import { fetchSurveys } from "../utils/apiUtils/surveys";
 
 const Surveys = () => {
   const { data: session } = useSession({
@@ -16,23 +17,20 @@ const Surveys = () => {
 
   const [surveys, setSurveys] = useState(null);
   const [surveysLoading, setSurveysLoading] = useState(true);
-  const [responses, setResponses] = useState(null);
-  const [responsesLoading, setResponsesLoading] = useState(true);
 
   useEffect(() => {
     const user = session?.user;
-    const fetchSurveys = async () => {
-      const res = await fetch("http://localhost:5000/api/surveys", {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
-      const { data } = await res.json();
-      setSurveys(data);
-      setSurveysLoading(false);
-    };
-
-    fetchSurveys();
+    if (user?.token) {
+      fetchSurveys(user.token)
+        .then((data) => {
+          setSurveys(data);
+          setSurveysLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching surveys: ", error);
+          setSurveysLoading(false);
+        });
+    }
   }, [session]);
 
   return (

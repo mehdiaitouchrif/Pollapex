@@ -4,16 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
-import { useSearchParams } from "next/navigation";
 
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const searchParams = useSearchParams();
-  let callbackUrl =
-    searchParams.get("callbackUrl") || "http://localhost:3000/dashboard";
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -24,7 +19,7 @@ const Signup = () => {
     }
     if (!email) {
       toast.error("Please enter your email");
-      retur;
+      return;
     }
     if (!password) {
       toast.error("Please enter a password");
@@ -44,11 +39,12 @@ const Signup = () => {
       await signIn("credentials", {
         email,
         password,
+        callbackUrl: "/dashboard",
         redirect: true,
-        callbackUrl,
       });
     }
   };
+
   return (
     <>
       <nav className='hidden md:flex justify-end items-center gap-4'>

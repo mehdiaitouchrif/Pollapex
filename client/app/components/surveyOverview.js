@@ -8,6 +8,11 @@ import SkeletonBox from "./skeleton";
 import toast from "react-hot-toast";
 import { FaCog } from "react-icons/fa";
 import Modal from "./modal";
+import {
+  editSurveyHandler,
+  fetchSurveyData,
+  publishOrDisableSurveyHandler,
+} from "../utils/apiUtils/surveys";
 
 const SurveyOverview = ({ id }) => {
   const { data: session } = useSession({
@@ -36,24 +41,12 @@ const SurveyOverview = ({ id }) => {
   // Publish survey
   const publishOrDisableSurvey = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/surveys/${id}`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${session?.user?.token}`,
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          active: survey.active ? "false" : "true",
-          published: survey.published ? "false" : "true",
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update survey.");
-      }
-
-      const { survey: data } = await response.json();
-      setSurvey(data);
+      const updatedData = await publishOrDisableSurveyHandler(
+        id,
+        session?.user?.token,
+        survey
+      );
+      setSurvey(updatedData);
     } catch (error) {
       console.error("Error updating survey:", error);
       toast.error("Failed to update the survey. Please try again later.");
@@ -81,25 +74,19 @@ const SurveyOverview = ({ id }) => {
   const editSurvey = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:5000/api/surveys/${id}`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${session?.user?.token}`,
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          title: survey.title,
-          description: survey.description,
-        }),
-      });
+      const updatedSurvey = {
+        title: survey.title,
+        description: survey.description,
+      };
 
-      if (!response.ok) {
-        throw new Error("Failed to update survey.");
-      }
+      const updatedData = await editSurveyHandler(
+        id,
+        updatedSurvey,
+        session?.user?.token
+      );
 
-      const { survey: data } = await response.json();
-      setSurvey(data);
-      toast.success("Success!");
+      setSurvey(updatedData);
+      toast.success("Survey updated successfully!");
       closeModal();
     } catch (error) {
       console.error("Error updating survey:", error);
@@ -114,23 +101,11 @@ const SurveyOverview = ({ id }) => {
 
     const fetchSurvey = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:5000/api/surveys/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user?.token}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch survey data.");
-        }
-
-        const { data: survey } = await response.json();
-        setSurvey(survey);
+        const surveyData = await fetchSurveyData(id, session?.user?.token);
+        setSurvey(surveyData);
       } catch (error) {
         console.error(error);
+        toast.error("Failed to fetch survey data. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -147,118 +122,120 @@ const SurveyOverview = ({ id }) => {
         {loading ? (
           <SkeletonBox />
         ) : (
-          <>
-            <div className='flex items-center justify-between'>
-              {survey.active ? (
-                <div className='p-2 text-sm w-fit rounded-lg bg-green-200 text-green-600'>
-                  Active
-                </div>
-              ) : (
-                <div className='p-2 text-sm w-fit rounded-lg bg-red-100 text-red-500'>
-                  Inactive
-                </div>
-              )}
+          survey && (
+            <>
+              <div className='flex items-center justify-between'>
+                {survey.active ? (
+                  <div className='p-2 text-sm w-fit rounded-lg bg-green-200 text-green-600'>
+                    Active
+                  </div>
+                ) : (
+                  <div className='p-2 text-sm w-fit rounded-lg bg-red-100 text-red-500'>
+                    Inactive
+                  </div>
+                )}
 
-              <div className='mb-auto'>
-                <FaCog
-                  size={30}
-                  className='text-gray-400 hover:text-gray-500 cursor-pointer'
-                  onClick={openModal}
-                />
-                <Modal isOpen={isModalOpen} onClose={closeModal}>
-                  <h2 className='text-2xl my-4'>Edit Survey </h2>
-
-                  <form
-                    className='p-4 my-4 rounded-lg shadow-sm bg-white border border-gray-100'
-                    onSubmit={editSurvey}
-                  >
-                    <div className='relative z-0 w-full mb-6 group'>
-                      <input
-                        type='text'
-                        name='title'
-                        id='title'
-                        value={survey.title}
-                        onChange={handleChange}
-                        className='block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
-                        placeholder=' '
-                        required
-                      />
-                      <label
-                        htmlFor='title'
-                        className='peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6'
-                      >
-                        Title
-                      </label>
-                    </div>
-
-                    <div className='relative z-0 w-full mb-6 group'>
-                      <textarea
-                        type='text'
-                        name='description'
-                        id='description'
-                        value={survey.description}
-                        onChange={handleChange}
-                        rows={4}
-                        className='block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
-                        placeholder=' '
-                        required
-                      />
-                      <label
-                        htmlFor='description'
-                        className='peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6'
-                      >
-                        Description
-                      </label>
-                    </div>
-
-                    <button
-                      type='submit'
-                      className='inline-block my-4 py-3 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow'
-                    >
-                      Save Changes
-                    </button>
-                  </form>
-                </Modal>
-              </div>
-            </div>
-
-            <h2 className='text-3xl mt-4 font-semibold'>{survey.title}</h2>
-            <p className='leading-10 text-gray-600'>{survey.description}</p>
-
-            <div className='flex items-center gap-8'>
-              {survey.active ? (
-                <button
-                  onClick={publishOrDisableSurvey}
-                  className='inline-block py-2 px-4 bg-red-100 text-red-500 rounded-lg my-4'
-                >
-                  Disable survey
-                </button>
-              ) : (
-                <button
-                  onClick={publishOrDisableSurvey}
-                  className='inline-block py-2 px-4 bg-blue-500 text-white font-bold rounded-lg my-4'
-                >
-                  Publish Survey
-                </button>
-              )}
-
-              {survey.active && (
-                <div
-                  className='flex items-center border py-2 px-4 rounded bg-gray-50 item'
-                  onClick={handleCopy}
-                  disabled={isCopied}
-                >
-                  <Link target='_blank' href={`/${id}`}>
-                    {dynamicUrl}
-                  </Link>
-                  <MdContentCopy
-                    className='ml-4 text-green-600 cursor-pointer hover:text-gray-500'
-                    size={20}
+                <div className='mb-auto'>
+                  <FaCog
+                    size={30}
+                    className='text-gray-400 hover:text-gray-500 cursor-pointer'
+                    onClick={openModal}
                   />
+                  <Modal isOpen={isModalOpen} onClose={closeModal}>
+                    <h2 className='text-2xl my-4'>Edit Survey </h2>
+
+                    <form
+                      className='p-4 my-4 rounded-lg shadow-sm bg-white border border-gray-100'
+                      onSubmit={editSurvey}
+                    >
+                      <div className='relative z-0 w-full mb-6 group'>
+                        <input
+                          type='text'
+                          name='title'
+                          id='title'
+                          value={survey.title}
+                          onChange={handleChange}
+                          className='block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
+                          placeholder=' '
+                          required
+                        />
+                        <label
+                          htmlFor='title'
+                          className='peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6'
+                        >
+                          Title
+                        </label>
+                      </div>
+
+                      <div className='relative z-0 w-full mb-6 group'>
+                        <textarea
+                          type='text'
+                          name='description'
+                          id='description'
+                          value={survey.description}
+                          onChange={handleChange}
+                          rows={4}
+                          className='block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
+                          placeholder=' '
+                          required
+                        />
+                        <label
+                          htmlFor='description'
+                          className='peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6'
+                        >
+                          Description
+                        </label>
+                      </div>
+
+                      <button
+                        type='submit'
+                        className='inline-block my-4 py-3 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow'
+                      >
+                        Save Changes
+                      </button>
+                    </form>
+                  </Modal>
                 </div>
-              )}
-            </div>
-          </>
+              </div>
+
+              <h2 className='text-3xl mt-4 font-semibold'>{survey.title}</h2>
+              <p className='leading-10 text-gray-600'>{survey.description}</p>
+
+              <div className='flex items-center gap-8'>
+                {survey.active ? (
+                  <button
+                    onClick={publishOrDisableSurvey}
+                    className='inline-block py-2 px-4 bg-red-100 text-red-500 rounded-lg my-4'
+                  >
+                    Disable survey
+                  </button>
+                ) : (
+                  <button
+                    onClick={publishOrDisableSurvey}
+                    className='inline-block py-2 px-4 bg-blue-500 text-white font-bold rounded-lg my-4'
+                  >
+                    Publish Survey
+                  </button>
+                )}
+
+                {survey.active && (
+                  <div
+                    className='flex items-center border py-2 px-4 rounded bg-gray-50 item'
+                    onClick={handleCopy}
+                    disabled={isCopied}
+                  >
+                    <Link target='_blank' href={`/${id}`}>
+                      {dynamicUrl}
+                    </Link>
+                    <MdContentCopy
+                      className='ml-4 text-green-600 cursor-pointer hover:text-gray-500'
+                      size={20}
+                    />
+                  </div>
+                )}
+              </div>
+            </>
+          )
         )}
       </div>
     </div>

@@ -8,6 +8,8 @@ import CreateSurveyBox from "../components/createSurveyBox";
 import { BsBoxArrowUpRight } from "react-icons/bs";
 import SkeletonBox from "../components/skeleton";
 import { timeAgo } from "../utils/helpers";
+import { fetchSurveys } from "../utils/apiUtils/surveys";
+import { fetchResponses } from "../utils/apiUtils/responses";
 
 const Dashboard = () => {
   const { data: session } = useSession({
@@ -24,31 +26,29 @@ const Dashboard = () => {
 
   useEffect(() => {
     const user = session?.user;
-    const fetchSurveys = async () => {
-      const res = await fetch("http://localhost:5000/api/surveys?limit=3", {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
-      const { data } = await res.json();
-      setSurveys(data);
-      setSurveysLoading(false);
-    };
 
-    const fetchRecentResponses = async () => {
-      const res = await fetch("http://localhost:5000/api/responses?limit=3", {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
+    if (user?.token) {
+      fetchSurveys(user.token, 3)
+        .then((data) => {
+          setSurveys(data);
+          setSurveysLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching surveys: ", error);
+          setSurveysLoading(false);
+        });
 
-      const { data } = await res.json();
-      setResponses(data);
-      setResponsesLoading(false);
-    };
-
-    fetchSurveys();
-    fetchRecentResponses();
+      // Fetch recent responses
+      fetchResponses(user.token, 3)
+        .then((data) => {
+          setResponses(data);
+          setResponsesLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching responses: ", error);
+          setResponsesLoading(false);
+        });
+    }
   }, [session]);
 
   return (

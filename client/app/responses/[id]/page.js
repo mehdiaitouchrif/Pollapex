@@ -15,6 +15,7 @@ import {
   timeAgo,
   trimIdToSixChars,
 } from "@/app/utils/helpers";
+import { fetchResponse } from "@/app/utils/apiUtils/responses";
 
 const SingleResponse = async ({ params: { id } }) => {
   const session = await getServerSession(authOptions);
@@ -22,18 +23,7 @@ const SingleResponse = async ({ params: { id } }) => {
     redirect(`/login?callbackUrl=/responses/${id}`);
   }
 
-  async function fetchResponse() {
-    const response = await fetch(`http://localhost:5000/api/responses/${id}`, {
-      headers: {
-        Authorization: `Bearer ${session.user.token}`,
-      },
-    });
-
-    const { data } = await response.json();
-    return data;
-  }
-
-  const response = await fetchResponse();
+  const response = await await fetchResponse(id, session?.user?.token);
 
   const browserName = getBrowserName(
     response.meta ? response.meta.userAgent : "other"

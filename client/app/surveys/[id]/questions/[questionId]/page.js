@@ -5,6 +5,10 @@ import { toast } from "react-hot-toast";
 import { redirect } from "next/navigation";
 import { camelCaseToTitleCase } from "@/app/utils/helpers";
 import GoBackLink from "@/app/components/GoBackLink";
+import {
+  fetchSingleQuestion,
+  updateQuestionHandler,
+} from "@/app/utils/apiUtils/questions";
 
 const EditQuestion = ({ params: { questionId } }) => {
   const { data: session } = useSession({
@@ -35,23 +39,21 @@ const EditQuestion = ({ params: { questionId } }) => {
   const updateQuestion = async (e) => {
     e.preventDefault();
 
-    const res = await fetch(
-      `http://localhost:5000/api/questions/${questionId}`,
-      {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${session?.user?.token}`,
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(question),
-      }
-    );
+    try {
+      const isUpdated = await updateQuestionHandler(
+        questionId,
+        session?.user?.token,
+        question
+      );
 
-    await res.json();
-    if (res.ok) {
-      toast.success("Updated successfully");
-    } else {
-      toast.error("Couldn't update question. Please try later");
+      if (isUpdated) {
+        toast.success("Updated successfully");
+      } else {
+        toast.error("Couldn't update question. Please try later");
+      }
+    } catch (error) {
+      console.error("Error updating question:", error);
+      toast.error("Failed to update the question. Please try again later.");
     }
   };
 
@@ -65,11 +67,12 @@ const EditQuestion = ({ params: { questionId } }) => {
 
   useEffect(() => {
     const fetchQuestion = async () => {
-      const res = await fetch(
-        `http://localhost:5000/api/questions/${questionId}`
-      );
-      const { data } = await res.json();
-      setQuestion(data);
+      try {
+        const questionData = await fetchSingleQuestion(questionId);
+        setQuestion(questionData);
+      } catch (error) {
+        console.error("Error fetching question:", error);
+      }
     };
 
     fetchQuestion();

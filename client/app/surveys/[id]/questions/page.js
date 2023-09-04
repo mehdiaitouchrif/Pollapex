@@ -6,6 +6,9 @@ import { FaTrash } from "react-icons/fa";
 import SurveyOverview from "@/app/components/surveyOverview";
 import { toast } from "react-hot-toast";
 import { redirect } from "next/navigation";
+import { fetchSurveyData } from "@/app/utils/apiUtils/surveys";
+import { camelCaseToTitleCase } from "@/app/utils/helpers";
+import { deleteQuestionHandler } from "@/app/utils/apiUtils/questions";
 
 const QuestionsPage = ({ params: { id } }) => {
   const { data: session } = useSession({
@@ -18,25 +21,19 @@ const QuestionsPage = ({ params: { id } }) => {
 
   // Delete question
   const deleteQuestion = async (questionId) => {
-    console.log(session?.user?.token);
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/questions/${questionId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${session?.user?.token}`,
-            "Content-Type": "application/json",
-          },
-        }
+      const isDeleted = await deleteQuestionHandler(
+        questionId,
+        session?.user?.token
       );
 
-      if (response.status === 204) {
+      if (isDeleted) {
+        toast.success("Deleted!");
         setQuestions((prevQuestions) =>
           prevQuestions.filter((question) => question._id !== questionId)
         );
-
-        toast.success("Deleted!");
+      } else {
+        toast.error("Failed to delete the question. Please try again later.");
       }
     } catch (error) {
       console.error("Error deleting question:", error);
@@ -45,31 +42,14 @@ const QuestionsPage = ({ params: { id } }) => {
   };
 
   useEffect(() => {
-    const fetchSurveyQuestions = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:5000/api/surveys/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user?.token}`,
-              "content-type": "application/json",
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch questions data.");
-        }
-
-        const { data } = await response.json();
-        setQuestions(data.questions);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    if (session && id) {
-      fetchSurveyQuestions();
+    if (session?.user?.token) {
+      fetchSurveyData(id)
+        .then((data) => {
+          setQuestions(data.questions);
+        })
+        .catch((error) => {
+          console.error("Error fetching survey: ", error);
+        });
     }
   }, [session, id]);
 
@@ -116,7 +96,7 @@ const QuestionsPage = ({ params: { id } }) => {
                       {question.question}
                     </h4>
                     <p className='text-gray-400 text-sm'>
-                      {question.type} |{" "}
+                      {camelCaseToTitleCase(question.type)} |{" "}
                       {question.required ? "Required" : "Optional"}{" "}
                     </p>
                   </div>

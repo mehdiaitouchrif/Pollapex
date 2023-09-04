@@ -3,6 +3,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import SurveyOverview from "@/app/components/surveyOverview";
+import { fetchSurveyResponses } from "@/app/utils/apiUtils/responses";
 
 const ResponsesPage = async ({ params: { id } }) => {
   const session = await getServerSession(authOptions);
@@ -10,21 +11,7 @@ const ResponsesPage = async ({ params: { id } }) => {
     redirect(`/login?callbackUrl=/surveys/${id}`);
   }
 
-  async function fetchResponses() {
-    const response = await fetch(
-      `http://localhost:5000/api/surveys/${id}/responses`,
-      {
-        headers: {
-          Authorization: `Bearer ${session.user.token}`,
-        },
-      }
-    );
-
-    const { data: responses } = await response.json();
-    return responses;
-  }
-
-  const responses = await fetchResponses();
+  const responses = await fetchSurveyResponses(id, session.user.token);
 
   return (
     <>

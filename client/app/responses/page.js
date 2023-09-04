@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import CreateSurveyBox from "../components/createSurveyBox";
 import SkeletonBox from "../components/skeleton";
 import Link from "next/link";
+import { fetchResponses } from "../utils/apiUtils/responses";
 
 const Responses = () => {
   const { data: session } = useSession({
@@ -19,18 +20,16 @@ const Responses = () => {
 
   useEffect(() => {
     const user = session?.user;
-    const fetchResponses = async () => {
-      const res = await fetch("http://localhost:5000/api/responses", {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
-      const { data } = await res.json();
-      setResponses(data);
-      setResponsesLoading(false);
-    };
 
-    fetchResponses();
+    fetchResponses(user?.token)
+      .then((data) => {
+        setResponses(data);
+        setResponsesLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching responses: ", error);
+        setResponsesLoading(false);
+      });
   }, [session]);
 
   return (

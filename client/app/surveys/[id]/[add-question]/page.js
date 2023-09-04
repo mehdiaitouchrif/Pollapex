@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { toast } from "react-hot-toast";
 import { redirect } from "next/navigation";
 import GoBackLink from "@/app/components/GoBackLink";
+import { addQuestionHandler } from "@/app/utils/apiUtils/questions";
 
 const AddQuestion = ({ params: { id } }) => {
   const { data: session } = useSession({
@@ -40,26 +41,27 @@ const AddQuestion = ({ params: { id } }) => {
   const addQuestion = async (e) => {
     e.preventDefault();
 
-    const res = await fetch(`http://localhost:5000/api/questions`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${session?.user?.token}`,
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({ ...question, surveyId: id }),
-    });
+    try {
+      const isAdded = await addQuestionHandler(
+        question,
+        id,
+        session?.user?.token
+      );
 
-    await res.json();
-    if (res.ok) {
-      toast.success("Question added successfully");
-      setQuestion({
-        question: "",
-        type: "multipleChoice",
-        optional: false,
-        choices: [],
-      });
-    } else {
-      toast.error("Couldn't add question. Please try later");
+      if (isAdded) {
+        toast.success("Question added successfully");
+        setQuestion({
+          question: "",
+          type: "multipleChoice",
+          optional: false,
+          choices: [],
+        });
+      } else {
+        toast.error("Couldn't add question. Please try again later");
+      }
+    } catch (error) {
+      console.error("Error adding question:", error);
+      toast.error("Failed to add the question. Please try again later.");
     }
   };
 

@@ -6,14 +6,17 @@ export const authOptions = {
     CredentialsProvider({
       name: "credentials",
       async authorize(credentials, req) {
-        const res = await fetch("http://localhost:5000/api/auth/signin", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: credentials?.email,
-            password: credentials?.password,
-          }),
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/signin`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: credentials?.email,
+              password: credentials?.password,
+            }),
+          }
+        );
 
         const data = await res.json();
         if (res.ok) {
@@ -29,6 +32,9 @@ export const authOptions = {
     signIn: "/login",
   },
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      return url;
+    },
     async jwt({ token, user }) {
       return { ...token, ...user };
     },

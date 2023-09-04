@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { FaPlus } from "react-icons/fa";
 import { useSession } from "next-auth/react";
+import { createSurvey } from "@/app/utils/apiUtils/surveys";
 
 const CreateSurveyPage = () => {
   // Auth
@@ -101,21 +102,17 @@ const CreateSurveyPage = () => {
 
   // Create the survey (finally)
   const publishSurveyHandler = async () => {
-    const res = await fetch("http://localhost:5000/api/surveys", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${session?.user?.token}`,
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(survey),
-    });
-    console.log(survey);
+    try {
+      const isPublished = await createSurvey(survey, session?.user?.token);
 
-    await res.json();
-    if (res.ok) {
-      toast.success("Survey created successfully");
-    } else {
-      toast.error("Couldn't create the survey. Please try later");
+      if (isPublished) {
+        toast.success("Survey created successfully");
+      } else {
+        toast.error("Couldn't create the survey. Please try again later");
+      }
+    } catch (error) {
+      console.error("Error publishing survey:", error);
+      toast.error("Failed to create the survey. Please try again later.");
     }
   };
 

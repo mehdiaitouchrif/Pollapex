@@ -4,10 +4,15 @@ import Link from "next/link";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
+import { useSearchParams } from "next/navigation";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const searchParams = useSearchParams();
+  let callbackUrl =
+    searchParams.get("callbackUrl") || `${window.location.origin}/dashboard`;
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -16,7 +21,8 @@ const Login = () => {
     const result = await signIn("credentials", {
       email,
       password,
-      redirect: false,
+      redirect: true,
+      callbackUrl,
     });
 
     if (result.error) {

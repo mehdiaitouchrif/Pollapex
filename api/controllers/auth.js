@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const { sendTokenResponse } = require("../utils/auth");
+const createDefaultData = require("../utils/defaultData");
 
 // @desc    Sign up
 // @route   POST /api/auth/signup
@@ -8,6 +9,11 @@ exports.signup = async (req, res, next) => {
     const { name, email, password } = req.body;
 
     const user = await User.create({ name, email, password });
+    try {
+      await createDefaultData(user);
+    } catch (error) {
+      next(error);
+    }
 
     sendTokenResponse(user, 201, res);
   } catch (error) {
