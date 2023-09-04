@@ -21,7 +21,7 @@ const SurveyOverview = ({ id }) => {
 
   // Survey Public Link
   const [isCopied, setIsCopied] = useState(false);
-  const dynamicUrl = `${window.location.origin}/surveys/fill/${id}`;
+  const dynamicUrl = `${window.location.origin}/${id}`;
 
   const handleCopy = async () => {
     try {
@@ -245,7 +245,9 @@ const SurveyOverview = ({ id }) => {
                   onClick={handleCopy}
                   disabled={isCopied}
                 >
-                  <Link href={`/surveys/fill/${id}`}>{dynamicUrl}</Link>
+                  <Link target='_blank' href={`/${id}`}>
+                    {dynamicUrl}
+                  </Link>
                   <MdContentCopy
                     className='ml-4 text-green-600 cursor-pointer hover:text-gray-500'
                     size={20}

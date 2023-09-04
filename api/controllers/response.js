@@ -15,6 +15,11 @@ exports.submitResponse = async (req, res, next) => {
       throw new Error("Survey not found");
     }
 
+    req.body.meta = {
+      userAgent: req.get("user-agent"),
+      ipAddress: req.ip,
+    };
+
     const { answers, meta } = req.body;
 
     // Check if required questions have been answered

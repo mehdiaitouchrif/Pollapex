@@ -14,10 +14,10 @@ const Modal = ({ isOpen, onClose, children }) => {
   };
   return (
     <div
-      className={`fixed inset-0 bg-black bg-opacity-50 ${modalClasses}`}
+      className={`fixed z-50 inset-0 bg-black bg-opacity-50 ${modalClasses}`}
       onClick={onClose}
     >
-      <div className='fixed inset-0 flex mt-48 h-fit justify-center z-50'>
+      <div className='fixed inset-0 flex mt-48 h-fit justify-center z-50 '>
         <div
           className='bg-white rounded-lg shadow-lg p-6 relative max-w-4xl mx-auto w-full'
           onClick={handleModalClick}

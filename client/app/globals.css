@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes selection {
+  0% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: #ebf8ff;
+  }
+}
+
+.animate-selection {
+  animation-name: selection;
+  animation-duration: 0.3s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+}

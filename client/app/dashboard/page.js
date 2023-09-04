@@ -52,7 +52,7 @@ const Dashboard = () => {
   }, [session]);
 
   return (
-    <div className='max-w-6xl mx-auto py-4 px-6'>
+    <div className='max-w-6xl mx-auto py-4 px-3 md:px-6'>
       <h2 className='text-3xl font-semibold my-4'>Dashboard</h2>
 
       <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
@@ -60,7 +60,12 @@ const Dashboard = () => {
           <h2 className='text-2xl font-semibold my-4'>Recent surveys</h2>
 
           {/* Loading */}
-          {surveysLoading && <SkeletonBox />}
+          {surveysLoading && (
+            <>
+              <SkeletonBox />
+              <SkeletonBox />
+            </>
+          )}
 
           {/* Surveys */}
           {surveys && (
@@ -97,7 +102,12 @@ const Dashboard = () => {
           <h2 className='text-2xl font-semibold my-4'>Recent responses</h2>
 
           {/* Loading */}
-          {responsesLoading && <SkeletonBox />}
+          {responsesLoading && (
+            <>
+              <SkeletonBox styleClasses='my-2' />
+              <SkeletonBox styleClasses='my-2' />
+            </>
+          )}
 
           {/* Responses */}
           {responses && (
