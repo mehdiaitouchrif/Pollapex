@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const { protect } = require("./middleware/auth");
 const { generateStatistis } = require("./controllers/statistics");
+const path = require("path");
 
 const app = express();
 
@@ -24,6 +25,8 @@ app.get("/api/statistics", protect, generateStatistis);
 app.get("/api/hello", (req, res) => {
   res.status(200).json("Hello world");
 });
+
+app.use(express.static(path.join(__dirname, "public")));
 
 // Error
 app.use((err, req, res, next) => {

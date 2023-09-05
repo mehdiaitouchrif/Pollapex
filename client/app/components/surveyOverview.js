@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { MdContentCopy } from "react-icons/md";
+import { MdContentCopy, MdDownload } from "react-icons/md";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -13,6 +13,7 @@ import {
   fetchSurveyData,
   publishOrDisableSurveyHandler,
 } from "../utils/apiUtils/surveys";
+import { exportResponsesToExcel } from "../utils/apiUtils/responses";
 
 const SurveyOverview = ({ id }) => {
   const { data: session } = useSession({
@@ -91,6 +92,25 @@ const SurveyOverview = ({ id }) => {
     } catch (error) {
       console.error("Error updating survey:", error);
       toast.error("Failed to update the survey. Please try again later.");
+    }
+  };
+
+  const [excelLoading, setExcelLoading] = useState(false);
+  const exportResponses = async () => {
+    try {
+      setExcelLoading(true);
+      const blob = await exportResponsesToExcel(id, session?.user?.token);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "survey_responses.xlsx";
+      a.click();
+      window.URL.revokeObjectURL(url);
+      setExcelLoading(false);
+      toast.success("Download successfull!");
+    } catch (error) {
+      console.error("API request failed:", error);
+      setExcelLoading(false);
     }
   };
 
@@ -235,6 +255,23 @@ const SurveyOverview = ({ id }) => {
                     </Link>
                     <MdContentCopy
                       className='ml-4 text-green-600 cursor-pointer hover:text-gray-500'
+                      size={20}
+                    />
+                  </div>
+                )}
+
+                {excelLoading ? (
+                  <p>Loading...</p>
+                ) : (
+                  <div
+                    className='flex items-center justify-between border py-2 px-4 rounded bg-blue-500 text-white font-medium'
+                    onClick={exportResponses}
+                  >
+                    <button className='inline-block w-full'>
+                      Download Responses Excel
+                    </button>
+                    <MdDownload
+                      className='ml-4 text-white cursor-pointer hover:text-gray-200'
                       size={20}
                     />
                   </div>

@@ -149,6 +149,7 @@ exports.exportResponsesToExcel = async (req, res, next) => {
   try {
     // Get survey ID from request params
     const { id } = req.params;
+    console.log("survey id", id);
 
     // Find the survey with the given ID
     const survey = await Survey.findById(id).populate("questions");

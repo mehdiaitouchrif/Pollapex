@@ -35,3 +35,25 @@ export async function fetchSurveyResponses(id, userToken) {
   const { data: responses } = await response.json();
   return responses;
 }
+
+export const exportResponsesToExcel = async (surveyId, userToken) => {
+  try {
+    const response = await fetch(
+      `${BACKEND_API_URL}/surveys/${surveyId}/responses/export`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      return response.blob();
+    } else {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
