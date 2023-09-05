@@ -9,6 +9,7 @@ import {
   fetchSingleQuestion,
   updateQuestionHandler,
 } from "@/app/utils/apiUtils/questions";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
 const EditQuestion = ({ params: { questionId } }) => {
   const { data: session } = useSession({
@@ -103,7 +104,7 @@ const EditQuestion = ({ params: { questionId } }) => {
           />
         </div>
 
-        <div className='flex items-center justify-between gap-8'>
+        <div className='flex items-center justify-between flex-col md:flex-row md:gap-8'>
           <div className='my-2 flex flex-col w-full'>
             <label
               htmlFor='type'
@@ -157,12 +158,11 @@ const EditQuestion = ({ params: { questionId } }) => {
                   value={choice}
                   onChange={(e) => handleChoiceChange(idx, e.target.value)}
                 />
-                <div
+                <AiOutlineCloseCircle
+                  size={24}
+                  className='cursor-pointer hover:text-red-700'
                   onClick={() => removeOption(idx)}
-                  className='h-7 w-7 text-gray-400 font-semibold shadow flex items-center justify-center rounded-full border border-gray-500 hover:text-gray-500 hover:shadow-lg hover:cursor-pointer '
-                >
-                  X
-                </div>
+                />
               </div>
             ))}
           </div>

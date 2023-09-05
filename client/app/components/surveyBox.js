@@ -16,7 +16,9 @@ const SurveyBox = ({ survey, makeBorderTransparent }) => {
     >
       <Link href={`/surveys/${survey._id}`} className='w-2/3'>
         <h4 className='mb-2 font-semibold'>{survey.title}</h4>
-        <p className='mb-4 text-gray-500'>{survey.description}</p>
+        <p className='mb-4 text-gray-500 hidden md:block '>
+          {survey.description}
+        </p>
         <div className='my-2'>
           {survey.active && (
             <span className='p-2 rounded bg-green-400'>Active</span>

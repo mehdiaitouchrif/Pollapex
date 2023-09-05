@@ -6,17 +6,11 @@ import SkeletonBox from "../components/skeleton";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
 
-import { Lora } from "next/font/google";
 import SurveyForm from "../components/surveyForm";
 import {
   fetchSurveyData,
   submitSurveyResponse,
 } from "../utils/apiUtils/surveys";
-
-const inter = Lora({
-  weight: ["400", "700"],
-  subsets: ["latin"],
-});
 
 const SurveyResponsePage = () => {
   const [survey, setSurvey] = useState(null);
@@ -101,8 +95,21 @@ const SurveyResponsePage = () => {
       });
   }, [publicId]);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: "name x",
+    title: "title x",
+    description: "description x",
+  };
+
   return (
-    <div className='bg-orange-50 p-4 md:p-8 h-max min-h-screen'>
+    <div className=' p-4 md:p-8 h-max'>
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       <div className='max-w-3xl mx-auto mb-8'>
         {survey && survey.published && !success && (
           <>
@@ -167,15 +174,6 @@ const SurveyResponsePage = () => {
             </div>
           </div>
         )}
-
-        <div className='my-8 text-center'>
-          <hr className='mb-4' />
-          <Link href='/'>
-            <h1 className={`text-3xl font-semibold  ${inter.className}`}>
-              Pollapex
-            </h1>
-          </Link>{" "}
-        </div>
       </div>
     </div>
   );

@@ -67,7 +67,7 @@ const Dashboard = () => {
 
   return (
     <div className='max-w-6xl mx-auto py-4 px-3 md:px-6'>
-      <h2 className='text-3xl font-semibold my-4'>Dashboard</h2>
+      <h2 className='text-2xl md:text-3xl font-semibold my-4'>Dashboard</h2>
 
       {statisticsLoading ? (
         <div className='grid grid-cols-1 gap-y-4 md:grid-cols-2 lg:grid-cols-3 gap-4'>
@@ -83,7 +83,7 @@ const Dashboard = () => {
                 <p className='text-sm text-gray-400 font-medium'>
                   Surveys created
                 </p>
-                <h4 className='text-3xl my-2 font-semibold'>
+                <h4 className='text-2xl md:text-3xl my-2 font-semibold'>
                   {statistics.totalSurveys}{" "}
                 </h4>
               </div>
@@ -91,7 +91,7 @@ const Dashboard = () => {
                 <p className='text-sm text-gray-400 font-medium'>
                   Total responses
                 </p>
-                <h4 className='text-3xl my-2 font-semibold'>
+                <h4 className='text-2xl md:text-3xl my-2 font-semibold'>
                   {statistics.totalResponses}
                 </h4>
               </div>
@@ -100,7 +100,7 @@ const Dashboard = () => {
                   Average responses per survey
                 </p>
 
-                <h4 className='text-3xl my-2 font-semibold'>
+                <h4 className='text-2xl md:text-3xl my-2 font-semibold'>
                   {statistics.averageResponsesPerSurvey}{" "}
                 </h4>
               </div>
@@ -108,7 +108,7 @@ const Dashboard = () => {
                 <p className='text-sm text-gray-400 font-medium'>
                   Average response time{" "}
                 </p>
-                <h4 className='text-3xl my-2 font-semibold'>
+                <h4 className='text-2xl md:text-3xl my-2 font-semibold'>
                   {statistics.averageResponseTime}{" "}
                 </h4>
               </div>

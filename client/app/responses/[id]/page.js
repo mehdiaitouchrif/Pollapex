@@ -42,12 +42,12 @@ const SingleResponse = async ({ params: { id } }) => {
     <div className='border-t border-t-gray-200 shadow-sm'>
       <div className='max-w-4xl mx-auto p-4 md:p-8'>
         <div className='p-6 flex items-center gap-4'>
-          <div className='bg-blue-100 w-fit p-4 rounded-full -mt-2'>
+          <div className='bg-blue-100 w-fit p-4 rounded-full -mt-6 sm:-mt-4 md:-mt-2'>
             <FaUser size={36} className='text-blue-500' />
           </div>
 
           <div>
-            <h2 className='text-2xl font-semibold'>
+            <h2 className='text-xl md:text-2xl font-semibold'>
               Response #{trimIdToSixChars(response._id)}
             </h2>
             <p className='text-gray-500 text-sm'>

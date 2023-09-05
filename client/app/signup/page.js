@@ -67,11 +67,11 @@ const Signup = () => {
       </nav>
 
       <div className='mb-10 md:mb-auto flex flex-col align-center max-w-xl mx-auto md:-mt-16 h-screen justify-center p-2'>
-        <div className='p-4 text-center'>
+        <div className='p-2 md:p-4 text-center'>
           <Link href='/'>
             <h2 className='text-3xl mb-4 font-semibold'>Pollapex</h2>
           </Link>
-          <h4 className='text-2xl text-gray-500'>
+          <h4 className='text-xl md:text-2xl text-gray-500'>
             Enhance your data collection with interactive conversational surveys
             and more
           </h4>

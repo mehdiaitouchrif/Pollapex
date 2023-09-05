@@ -6,10 +6,12 @@ export const metadata = {
 
 const ResponsesLayout = ({ children }) => {
   return (
-    <>
-      <Header />
+    <div className='min-h-screen bg-gray-50'>
+      <div className='bg-white'>
+        <Header />
+      </div>
       <div className='bg-gray-50'>{children}</div>
-    </>
+    </div>
   );
 };
 

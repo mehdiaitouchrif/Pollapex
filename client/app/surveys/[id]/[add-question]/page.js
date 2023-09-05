@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import { redirect } from "next/navigation";
 import GoBackLink from "@/app/components/GoBackLink";
 import { addQuestionHandler } from "@/app/utils/apiUtils/questions";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
 const AddQuestion = ({ params: { id } }) => {
   const { data: session } = useSession({
@@ -98,7 +99,7 @@ const AddQuestion = ({ params: { id } }) => {
           />
         </div>
 
-        <div className='flex items-center justify-between gap-8'>
+        <div className='flex items-center justify-between flex-col md:flex-row md:gap-8'>
           <div className='my-2 flex flex-col w-full'>
             <label
               htmlFor='optional'
@@ -158,12 +159,11 @@ const AddQuestion = ({ params: { id } }) => {
                   value={choice}
                   onChange={(e) => handleChoiceChange(idx, e.target.value)}
                 />
-                <div
+                <AiOutlineCloseCircle
+                  size={24}
+                  className='cursor-pointer hover:text-red-700'
                   onClick={() => removeOption(idx)}
-                  className='h-7 w-7 text-gray-400 font-semibold shadow flex items-center justify-center rounded-full border border-gray-500 hover:text-gray-500 hover:shadow-lg hover:cursor-pointer '
-                >
-                  X
-                </div>
+                />
               </div>
             ))}
           </div>

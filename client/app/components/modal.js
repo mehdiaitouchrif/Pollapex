@@ -19,7 +19,7 @@ const Modal = ({ isOpen, onClose, children }) => {
     >
       <div className='fixed inset-0 flex mt-48 h-fit justify-center z-50 '>
         <div
-          className='bg-white rounded-lg shadow-lg p-6 relative max-w-4xl mx-auto w-full'
+          className='bg-white rounded-lg shadow-lg p-2 md:p-6 relative max-w-4xl mx-2 md:mx-auto w-full'
           onClick={handleModalClick}
         >
           <button

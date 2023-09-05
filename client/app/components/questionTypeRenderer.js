@@ -66,7 +66,7 @@ const QuestionTypeRenderer = ({
           ))}
 
           <button
-            className='bg-black text-white rounded shadow py-3 px-6 my-4'
+            className='bg-black text-white rounded shadow py-2 px-4 my-4'
             onClick={() => addChoice(index)}
           >
             Add option

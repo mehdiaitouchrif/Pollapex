@@ -199,9 +199,11 @@ const SurveyOverview = ({ id }) => {
               </div>
 
               <h2 className='text-3xl mt-4 font-semibold'>{survey.title}</h2>
-              <p className='leading-10 text-gray-600'>{survey.description}</p>
+              <p className='leading-6 mt-2 text-gray-600'>
+                {survey.description}
+              </p>
 
-              <div className='flex items-center gap-8'>
+              <div className='flex flex-col md:flex-row items-left md:items-center gap-2 md:gap-8'>
                 {survey.active ? (
                   <button
                     onClick={publishOrDisableSurvey}
@@ -220,12 +222,16 @@ const SurveyOverview = ({ id }) => {
 
                 {survey.active && (
                   <div
-                    className='flex items-center border py-2 px-4 rounded bg-gray-50 item'
+                    className='flex items-center justify-between border py-2 px-4 rounded bg-gray-50 item'
                     onClick={handleCopy}
                     disabled={isCopied}
                   >
-                    <Link target='_blank' href={`/${id}`}>
-                      {dynamicUrl}
+                    <Link
+                      target='_blank'
+                      href={`/${id}`}
+                      className='inline-block w-full'
+                    >
+                      Share Survey Now!
                     </Link>
                     <MdContentCopy
                       className='ml-4 text-green-600 cursor-pointer hover:text-gray-500'

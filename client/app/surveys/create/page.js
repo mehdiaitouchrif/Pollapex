@@ -117,7 +117,7 @@ const CreateSurveyPage = () => {
   };
 
   return (
-    <div className='max-w-4xl mx-auto p-4'>
+    <div className='max-w-4xl mx-auto p-2 md:p-4'>
       {/* survey initials */}
       <div className='bg-white p-4 rounded-lg shadow my-8 border-t-8 border-t-blue-500 border-l-8 focus:border-l-purple-500'>
         <div className='relative z-0 w-full mb-6 group'>
@@ -176,7 +176,7 @@ const CreateSurveyPage = () => {
       ))}
 
       <button
-        style={{ top: "30%", right: "20%" }}
+        style={{ top: "25%", right: "15%" }}
         className='inline-block fixed bg-white p-4 rounded-full shadow-lg border-2 border-transparent hover:border-2 hover:border-blue-500 focus:bg-none focus:outline-none'
         onClick={addQuestion}
       >
