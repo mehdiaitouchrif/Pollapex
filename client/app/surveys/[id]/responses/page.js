@@ -11,7 +11,7 @@ const ResponsesPage = async ({ params: { id } }) => {
     redirect(`/login?callbackUrl=/surveys/${id}`);
   }
 
-  const responses = await fetchSurveyResponses(id, session.user.token);
+  const responses = await fetchSurveyResponses(id, session?.user?.token);
 
   return (
     <>
@@ -40,9 +40,9 @@ const ResponsesPage = async ({ params: { id } }) => {
             </Link>
           </div>
 
-          {responses.length > 0 && (
+          {responses?.length > 0 && (
             <div className='px-4 py-2 my-4 rounded-lg bg-white shadow'>
-              {responses.map((response, idx) => (
+              {responses?.map((response, idx) => (
                 <div
                   key={response._id}
                   className={`flex items-center justify-between py-2 my-2 border-b ${
