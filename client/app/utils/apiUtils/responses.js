@@ -23,14 +23,11 @@ export async function fetchResponse(id, userToken) {
 }
 
 export async function fetchSurveyResponses(id, userToken) {
-  const response = await fetch(
-    `http://localhost:5000/api/surveys/${id}/responses`,
-    {
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-      },
-    }
-  );
+  const response = await fetch(`${BACKEND_API_URL}/surveys/${id}/responses`, {
+    headers: {
+      Authorization: `Bearer ${userToken}`,
+    },
+  });
 
   const { data: responses } = await response.json();
   return responses;
