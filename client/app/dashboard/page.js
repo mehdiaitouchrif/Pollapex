@@ -10,6 +10,7 @@ import SkeletonBox from "../components/skeleton";
 import { timeAgo } from "../utils/helpers";
 import { fetchStatistics, fetchSurveys } from "../utils/apiUtils/surveys";
 import { fetchResponses } from "../utils/apiUtils/responses";
+import { IoMdClose } from "react-icons/io";
 
 const Dashboard = () => {
   const { data: session } = useSession({
@@ -26,6 +27,8 @@ const Dashboard = () => {
 
   const [statistics, setStatistics] = useState(null);
   const [statisticsLoading, setStatisticsLoading] = useState(true);
+
+  const [showMessage, setShowMessage] = useState(false);
 
   useEffect(() => {
     const user = session?.user;
@@ -65,8 +68,37 @@ const Dashboard = () => {
     }
   }, [session]);
 
+  useEffect(() => {
+    if (
+      surveys &&
+      surveys.length === 1 &&
+      surveys[0].title.trim() === "Default Example Survey"
+    ) {
+      setShowMessage(true);
+    }
+  }, [surveys]);
+
   return (
     <div className='max-w-6xl mx-auto py-4 px-3 md:px-6'>
+      {showMessage && (
+        <div className='p-4 bg-blue-500 text-white font-medium flex items-start justify-between rounded-lg shadow mb-4'>
+          <div>
+            <h4 className='text-xl mb-2'>Welcome to Pollapex</h4>
+            <p className='text-sm'>
+              We created a default survey for you as an example of what you can
+              accomplish. Please feel free to create your own surveys or modify
+              anything as you wish.
+            </p>
+          </div>
+
+          <div>
+            <IoMdClose
+              className='text-xl cursor-pointer hover:text-gray-100'
+              onClick={() => setShowMessage(false)}
+            />
+          </div>
+        </div>
+      )}
       <h2 className='text-2xl md:text-3xl font-semibold my-4'>Dashboard</h2>
 
       {statisticsLoading ? (

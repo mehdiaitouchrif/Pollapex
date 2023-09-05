@@ -47,7 +47,7 @@ async function createDefaultData(user) {
     const questionIds = insertedQuestions.map((q) => q._id);
 
     const defaultSurvey = await Survey.create({
-      title: "Market Research Example Survey",
+      title: "Default Example Survey",
       description:
         "Participate in our Market Research Survey and help us tailor our products to your preferences. Share your valuable insights, from product satisfaction to feature suggestions. Your opinions matter, and together, we can shape the future of our offerings. Join us today!",
       owner: user._id,

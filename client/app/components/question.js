@@ -13,7 +13,7 @@ const Question = ({
   deleteChoice,
 }) => {
   return (
-    <div className='bg-white p-4 rounded-lg shadow my-8 border-t-8 border-l-8 border-l-blue-500'>
+    <div className='bg-white p-4 text-sm md:text-base rounded-lg shadow my-8 border-t-8 border-l-4 md:border-l-8 border-l-blue-500'>
       <div className='relative z-0 w-full mb-6 group'>
         <input
           type='text'

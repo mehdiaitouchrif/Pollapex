@@ -117,9 +117,9 @@ const CreateSurveyPage = () => {
   };
 
   return (
-    <div className='max-w-4xl mx-auto p-2 md:p-4'>
+    <div className='max-w-4xl mx-auto p-3 md:p-4'>
       {/* survey initials */}
-      <div className='bg-white p-4 rounded-lg shadow my-8 border-t-8 border-t-blue-500 border-l-8 focus:border-l-purple-500'>
+      <div className='bg-white p-4 rounded-lg shadow my-8 border-t-4 md:border-t-8 border-t-blue-500 border-l-8 focus:border-l-purple-500'>
         <div className='relative z-0 w-full mb-6 group'>
           <input
             type='text'

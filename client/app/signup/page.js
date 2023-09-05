@@ -5,11 +5,13 @@ import Link from "next/link";
 import { signIn, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { redirect } from "next/navigation";
+import LoadingSpinner from "../components/loadingSpinner";
 
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -27,6 +29,8 @@ const Signup = () => {
       return;
     }
 
+    setLoading(true);
+
     // handle submit
     const res = await fetch("/api/signup", {
       method: "POST",
@@ -36,7 +40,9 @@ const Signup = () => {
     const data = await res.json();
     if (data.errors) {
       data.errors.map((err) => toast.error(err.msg));
+      setLoading(false);
     } else if (data.success) {
+      setLoading(false);
       await signIn("credentials", {
         email,
         password,
@@ -56,6 +62,8 @@ const Signup = () => {
 
   return (
     <>
+      {loading && <LoadingSpinner />}
+
       <nav className='hidden md:flex justify-end items-center gap-4'>
         <p className='text-gray-600'>Already have an account?</p>
         <Link

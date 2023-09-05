@@ -14,6 +14,7 @@ import {
   publishOrDisableSurveyHandler,
 } from "../utils/apiUtils/surveys";
 import { exportResponsesToExcel } from "../utils/apiUtils/responses";
+import LoadingSpinner from "./loadingSpinner";
 
 const SurveyOverview = ({ id }) => {
   const { data: session } = useSession({
@@ -261,7 +262,7 @@ const SurveyOverview = ({ id }) => {
                 )}
 
                 {excelLoading ? (
-                  <p>Loading...</p>
+                  <LoadingSpinner />
                 ) : (
                   <div
                     className='flex items-center justify-between border py-2 px-4 rounded bg-blue-500 text-white font-medium'

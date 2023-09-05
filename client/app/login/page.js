@@ -5,13 +5,16 @@ import { useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { redirect } from "next/navigation";
+import LoadingSpinner from "../components/loadingSpinner";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
 
     // handle submit
     const result = await signIn("credentials", {
@@ -22,7 +25,9 @@ const Login = () => {
 
     if (result.error) {
       JSON.parse(result.error).map((err) => toast.error(err.msg));
+      setLoading(false);
     } else {
+      setLoading(false);
       window.location = "dashboard";
     }
   };
@@ -37,6 +42,7 @@ const Login = () => {
 
   return (
     <div className='flex flex-col align-center max-w-xs mx-auto -mt-16 h-screen justify-center p-2'>
+      {loading && <LoadingSpinner />}
       <div className='p-4 text-center'>
         <Link href='/'>
           <h2 className='text-3xl mb-4 font-semibold'>Pollapex</h2>
