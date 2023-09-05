@@ -6,6 +6,7 @@ const cors = require("cors");
 const { protect } = require("./middleware/auth");
 const { generateStatistis } = require("./controllers/statistics");
 const path = require("path");
+const { productionEnv } = require("./config");
 
 const app = express();
 
@@ -13,7 +14,9 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
-app.use(morgan("dev"));
+if (!productionEnv) {
+  app.use(morgan("dev"));
+}
 
 // Router
 app.use("/api/auth", require("./routes/auth"));
