@@ -4,16 +4,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
-import { useSearchParams } from "next/navigation";
 import { redirect } from "next/navigation";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const searchParams = useSearchParams();
-  let callbackUrl =
-    searchParams.get("callbackUrl") || `${window.location.origin}/dashboard`;
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -22,8 +17,7 @@ const Login = () => {
     const result = await signIn("credentials", {
       email,
       password,
-      redirect: true,
-      callbackUrl,
+      redirect: false,
     });
 
     if (result.error) {

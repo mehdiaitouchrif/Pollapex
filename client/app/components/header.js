@@ -3,7 +3,6 @@ import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 
 import { Lora } from "next/font/google";
-import { useEffect, useState } from "react";
 
 const inter = Lora({
   weight: ["400", "700"],
@@ -11,7 +10,7 @@ const inter = Lora({
 });
 
 const Header = () => {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   return (
     <nav className='p-4 md:px-8 flex items-center xl:container mx-auto'>
