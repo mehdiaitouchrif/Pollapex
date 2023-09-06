@@ -133,7 +133,7 @@ const Dashboard = () => {
                 </p>
 
                 <h4 className='text-2xl md:text-3xl my-2 font-semibold'>
-                  {statistics.averageResponsesPerSurvey}{" "}
+                  {statistics.averageResponsesPerSurvey.toFixed(2)}{" "}
                 </h4>
               </div>
               <div className='bg-white rounded-lg shadow border p-4'>

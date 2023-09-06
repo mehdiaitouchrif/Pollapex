@@ -10,16 +10,16 @@ const Modal = ({ isOpen, onClose, children }) => {
 
   const iconStyle = {
     strokeWidth: "1",
-    fontSize: "28px",
+    fontSize: "1.6rem",
   };
   return (
     <div
       className={`fixed z-50 inset-0 bg-black bg-opacity-50 ${modalClasses}`}
       onClick={onClose}
     >
-      <div className='fixed inset-0 flex mt-48 h-fit justify-center z-50 '>
+      <div className='fixed inset-0 flex items-center justify-center z-50 '>
         <div
-          className='bg-white rounded-lg shadow-lg p-2 md:p-6 relative max-w-4xl mx-3 md:mx-auto w-full'
+          className='bg-white rounded-lg shadow-lg p-2 md:p-4 relative max-w-3xl mx-3 md:mx-auto w-full'
           onClick={handleModalClick}
         >
           <button

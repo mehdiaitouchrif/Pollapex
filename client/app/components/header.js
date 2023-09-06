@@ -13,10 +13,10 @@ const Header = () => {
   const { status } = useSession();
 
   return (
-    <nav className='p-4 md:px-8 flex items-center xl:container mx-auto'>
+    <nav className='mx-auto p-4 md:px-6 flex items-center justify-between'>
       <Link href='/'>
         <h1
-          className={`text-2xl md:text-3xl font-semibold  ${inter.className}`}
+          className={`text-[28px] md:text-3xl font-semibold  ${inter.className}`}
         >
           Pollapex
         </h1>

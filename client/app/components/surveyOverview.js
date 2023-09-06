@@ -163,7 +163,7 @@ const SurveyOverview = ({ id }) => {
                     onClick={openModal}
                   />
                   <Modal isOpen={isModalOpen} onClose={closeModal}>
-                    <h2 className='text-2xl my-4'>Edit Survey </h2>
+                    <h2 className='text-xl my-4'>Edit Survey </h2>
 
                     <form
                       className='p-4 my-4 rounded-lg shadow-sm bg-white border border-gray-100'
@@ -210,7 +210,7 @@ const SurveyOverview = ({ id }) => {
 
                       <button
                         type='submit'
-                        className='inline-block my-4 py-3 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow'
+                        className='inline-block my-4 py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow'
                       >
                         Save Changes
                       </button>

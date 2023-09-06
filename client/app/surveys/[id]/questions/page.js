@@ -62,19 +62,19 @@ const QuestionsPage = ({ params: { id } }) => {
           <div className='flex items-center gap-8'>
             <Link
               href={`/surveys/${id}`}
-              className='inline-block text-gray-600 text-lg'
+              className='inline-block text-gray-600 text-lg hover:text-black'
             >
               Overview
             </Link>
             <Link
               href={`/surveys/${id}/responses`}
-              className='inline-block text-gray-600 text-lg'
+              className='inline-block text-gray-600 text-lg hover:text-black'
             >
               Responses
             </Link>
             <Link
               href={`/surveys/${id}/questions`}
-              className='inline-block font-semibold text-lg'
+              className='inline-block font-semibold text-lg hover:text-black'
             >
               Questions
             </Link>

@@ -26,12 +26,12 @@ const Home = async () => {
         </div>
         <div className='order-1 md:order-2'>
           <div className='mb-8'>
-            <h2 className='text-7xl'>Build</h2>
-            <h2 className='text-7xl'>powerful</h2>
-            <h2 className='text-7xl'>surveys!</h2>
+            <h2 className='text-5xl lg:text-6xl'>Build</h2>
+            <h2 className='text-5xl lg:text-6xl'>powerful</h2>
+            <h2 className='text-5xl lg:text-6xl'>surveys!</h2>
           </div>
 
-          <p className='text-2xl'>
+          <p className='text-xl lg:text-2xl'>
             Get more <span className='font-bold'>data—like</span>, feedback,
             conduct studies, and anything
             <span className='font-bold'> else—with</span> Pollapex effortlessly.
