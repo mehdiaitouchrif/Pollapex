@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { FaCog } from "react-icons/fa";
 import Modal from "./modal";
 import {
+  deleteSurvey,
   editSurveyHandler,
   fetchSurveyData,
   publishOrDisableSurveyHandler,
@@ -115,6 +116,13 @@ const SurveyOverview = ({ id }) => {
     }
   };
 
+  const deleteSurveyHandler = async () => {
+    if (confirm("Are you sure you want to delete this survey?")) {
+      await deleteSurvey(id, session?.user?.token);
+      window.location = "/dashboard";
+    }
+  };
+
   // API requests
   useEffect(() => {
     const url = `${window.location.origin}/${id}`;
@@ -208,12 +216,21 @@ const SurveyOverview = ({ id }) => {
                         </label>
                       </div>
 
-                      <button
-                        type='submit'
-                        className='inline-block my-4 py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow'
-                      >
-                        Save Changes
-                      </button>
+                      <div className='flex items-center gap-x-4'>
+                        <button
+                          type='submit'
+                          className='inline-block my-4 py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow'
+                        >
+                          Save Changes
+                        </button>
+                        <button
+                          type='button'
+                          onClick={deleteSurveyHandler}
+                          className='py-2 px-4 rounded-lg bg-red-500 hover:bg-red-600 font-medium text-white shadow'
+                        >
+                          Delete Survey
+                        </button>
+                      </div>
                     </form>
                   </Modal>
                 </div>

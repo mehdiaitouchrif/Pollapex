@@ -152,6 +152,11 @@ exports.deleteSurvey = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
+
+    // delete responses & questions
+    await Response.deleteMany({ survey: survey._id });
+    await Question.deleteMany({ _id: { $in: survey.questions } });
+
     await survey.deleteOne();
     res.status(204).send();
   } catch (error) {

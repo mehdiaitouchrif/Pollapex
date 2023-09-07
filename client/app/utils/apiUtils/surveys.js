@@ -99,6 +99,26 @@ export async function editSurveyHandler(id, surveyData, userToken) {
   }
 }
 
+export async function deleteSurvey(id, userToken) {
+  try {
+    const response = await fetch(`${BACKEND_API_URL}/surveys/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.ok) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function publishOrDisableSurveyHandler(
   id,
   sessionToken,
