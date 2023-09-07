@@ -17,25 +17,3 @@
   animation-timing-function: ease-in-out;
   animation-fill-mode: forwards;
 }
-
-body {
-  zoom: 1;
-}
-
-@media (max-width: 768px) {
-  body {
-    zoom: 95%;
-  }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-  body {
-    zoom: 85%;
-  }
-}
-
-@media (min-width: 1025px) and (max-width: 1600px) {
-  body {
-    zoom: 75%;
-  }
-}
