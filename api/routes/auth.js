@@ -1,6 +1,13 @@
 const express = require("express");
 const { body } = require("express-validator");
-const { signup, signin, getMe, findUser } = require("../controllers/auth");
+const {
+  signup,
+  signin,
+  getMe,
+  findUser,
+  resetPassword,
+  forgotPassword,
+} = require("../controllers/auth");
 const { protect } = require("../middleware/auth");
 const handleInputErrors = require("../middleware/error");
 
@@ -29,5 +36,18 @@ router.post(
 );
 router.get("/me", protect, getMe);
 router.get("/:email", findUser);
+
+router.post(
+  "/forgotpassword",
+  body("email").isEmail().withMessage("Please enter your account email"),
+  handleInputErrors,
+  forgotPassword
+);
+router.put(
+  "/resetpassword/:resettoken",
+  body("password").isString().withMessage("Enter your new password"),
+  handleInputErrors,
+  resetPassword
+);
 
 module.exports = router;
