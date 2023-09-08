@@ -11,9 +11,16 @@ const { productionEnv } = require("./config");
 const app = express();
 
 // Middleware
+const corsOptions = {
+  origin: ["https://pollapex.vercel.app", "http://localhost:3000"],
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+  optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(cors());
 if (!productionEnv) {
   app.use(morgan("dev"));
 }
