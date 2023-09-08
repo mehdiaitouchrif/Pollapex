@@ -88,7 +88,7 @@ exports.forgotPassword = async (req, res, next) => {
       await user.save({ validateBeforeSave: false });
 
       // Create reset url
-      const resetLink = `${process.env.CLIENT_URL}/resettoken/${resetToken}`;
+      const resetLink = `${process.env.CLIENT_URL}/resetpassword/${resetToken}`;
 
       // Email template
       const emailTemplate = fs.readFileSync(
@@ -100,7 +100,7 @@ exports.forgotPassword = async (req, res, next) => {
       const templateVars = {
         username: user.name,
         resetLink,
-        clientPage: `${process.env.CLIENT_URL}/forgot-password`,
+        clientPage: `${process.env.CLIENT_URL}/forgotpassword`,
       };
 
       try {

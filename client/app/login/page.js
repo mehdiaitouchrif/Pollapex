@@ -67,7 +67,7 @@ const Login = () => {
             placeholder='zenitsu@swordsmen.com'
           />
         </div>
-        <div className='mb-6'>
+        <div>
           <label
             className='block text-gray-700 text-sm font-semibold mb-2'
             htmlFor='password'
@@ -83,6 +83,12 @@ const Login = () => {
             placeholder='************'
           />
         </div>
+        <Link
+          href='/forgotpassword'
+          className='inline-block mb-6 underline text-gray-600'
+        >
+          Forgot password?
+        </Link>
         <div className='flex items-center justify-between'>
           <input
             className='bg-black w-full cursor-pointer hover:-translate-y-1 transition duration-200 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline'
