@@ -1,8 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { FaShare, FaChartBar, FaFileExport, FaPlus } from "react-icons/fa";
-import Header from "./components/header";
-import Footer from "./components/footer";
+import Header from "@/components/header";
+import Footer from "@/components/footer";
 
 const Home = async () => {
   return (

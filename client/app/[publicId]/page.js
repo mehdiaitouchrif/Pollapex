@@ -2,15 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import SkeletonBox from "../components/skeleton";
+import SkeletonBox from "@/components/skeleton";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
 
-import SurveyForm from "../components/surveyForm";
+import SurveyForm from "@/components/surveyForm";
 import {
   fetchSurveyData,
   submitSurveyResponse,
-} from "../utils/apiUtils/surveys";
+} from "@/utils/apiUtils/surveys";
 
 const SurveyResponsePage = () => {
   const [survey, setSurvey] = useState(null);

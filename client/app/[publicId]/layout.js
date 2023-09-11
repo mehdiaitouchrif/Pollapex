@@ -1,9 +1,5 @@
 import Link from "next/link";
 
-// export const metadata = {
-//   title: "Fill Survey | Pollapex",
-// };
-
 import { Lora } from "next/font/google";
 
 const inter = Lora({
