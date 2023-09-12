@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { toast } from "react-hot-toast";
 import { redirect } from "next/navigation";
-import GoBackLink from "@/app/components/GoBackLink";
+import GoBackLink from "@/components/GoBackLink";
 import { addQuestionHandler } from "@/utils/apiUtils/questions";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
