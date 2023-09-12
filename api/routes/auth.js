@@ -7,6 +7,7 @@ const {
   findUser,
   resetPassword,
   forgotPassword,
+  oauthHandler,
 } = require("../controllers/auth");
 const { protect } = require("../middleware/auth");
 const handleInputErrors = require("../middleware/error");
@@ -36,6 +37,8 @@ router.post(
 );
 router.get("/me", protect, getMe);
 router.get("/:email", findUser);
+
+router.post("/oauth", oauthHandler);
 
 router.post(
   "/forgotpassword",

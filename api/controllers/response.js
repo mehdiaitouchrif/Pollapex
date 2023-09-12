@@ -104,7 +104,7 @@ exports.getResponses = async (req, res, next) => {
       limit = parseInt(req.query.limit);
     }
 
-    loggedInUser = req.user._id.toString();
+    loggedInUser = req.user.id.toString();
     const surveys = await Survey.find({ owner: loggedInUser }).select("_id");
     const surveyIds = surveys.map((survey) => survey._id);
 

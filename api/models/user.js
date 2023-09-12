@@ -7,7 +7,8 @@ const { JwtSecret, JwtExpires } = require("../config");
 const UserSchema = new mongoose.Schema(
   {
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String, required: false },
+    picture: { type: String, required: false, default: "default_avatar.png" },
     name: { type: String, required: true },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
@@ -16,12 +17,25 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    oauth: {
+      github: {
+        id: String,
+        username: String,
+      },
+      google: {
+        id: String,
+        email: String,
+      },
+    },
   },
   { timestamps: true }
 );
 
 // Encrypt password
 UserSchema.pre("save", async function (next) {
+  if (this.oauth) {
+    next();
+  }
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });

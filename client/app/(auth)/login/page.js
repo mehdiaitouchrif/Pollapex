@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
-import toast from "react-hot-toast";
 import { redirect } from "next/navigation";
+import toast from "react-hot-toast";
+import { FaGithub, FaGoogle } from "react-icons/fa";
 import LoadingSpinner from "@/components/loadingSpinner";
 
 const Login = () => {
@@ -41,7 +42,7 @@ const Login = () => {
   }, [session]);
 
   return (
-    <div className='flex flex-col align-center max-w-xs mx-auto -mt-16 h-screen justify-center p-2'>
+    <div className='flex flex-col align-center max-w-xs mx-auto -mt-20 h-screen justify-center p-2'>
       {loading && <LoadingSpinner />}
       <div className='p-4 text-center'>
         <Link href='/'>
@@ -98,12 +99,26 @@ const Login = () => {
         </div>
       </form>
 
-      <p className='text-center text-gray-400 mt-2 text-sm'>
-        Don{"'"}t have an account?{" "}
-        <Link className='text-gray-500 underline' href='/signup'>
-          Sign up
-        </Link>{" "}
-      </p>
+      <hr />
+      <div className='p-4'>
+        {/* GitHub login button */}
+        <button
+          className='w-full font-medium my-2 bg-gray-800 text-white px-4 py-2 rounded shadow flex items-center justify-center space-x-2 hover:bg-gray-700'
+          onClick={() => signIn("github")}
+        >
+          <FaGithub size={24} />
+          <span>Login with GitHub</span>
+        </button>
+
+        {/* Google login button */}
+        <button
+          className='w-full font-medium my-2 bg-red-600 text-white px-4 py-2 rounded shadow flex items-center justify-center space-x-2 hover:bg-red-700'
+          onClick={() => signIn("google")}
+        >
+          <FaGoogle size={24} />
+          <span>Login with Google</span>
+        </button>
+      </div>
     </div>
   );
 };

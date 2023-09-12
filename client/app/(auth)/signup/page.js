@@ -6,6 +6,7 @@ import { signIn, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { redirect } from "next/navigation";
 import LoadingSpinner from "@/components/loadingSpinner";
+import { FaGithub, FaGoogle } from "react-icons/fa";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -74,7 +75,7 @@ const Signup = () => {
         </Link>{" "}
       </nav>
 
-      <div className='mb-10 md:mb-auto flex flex-col align-center max-w-xl mx-auto md:-mt-16 h-screen justify-center p-2'>
+      <div className='mb-10 md:mb-auto flex flex-col align-center max-w-xl mx-auto md:-mt-12 h-screen justify-center p-2'>
         <div className='p-2 md:p-4 text-center'>
           <Link href='/'>
             <h2 className='text-3xl mb-4 font-semibold'>Pollapex</h2>
@@ -85,7 +86,7 @@ const Signup = () => {
           </h4>
         </div>
 
-        <form className='p-4 mb-4 max-w-xs mx-auto' onSubmit={onSubmit}>
+        <form className='p-4 mb-2 max-w-xs mx-auto' onSubmit={onSubmit}>
           <div className='mb-4'>
             <label
               className='block text-gray-700 text-sm font-semibold mb-2'
@@ -144,14 +145,26 @@ const Signup = () => {
           </div>
         </form>
 
-        <hr />
+        <div className='p-4 max-w-xs mx-auto w-full'>
+          <hr className='pb-4' />
+          {/* GitHub login button */}
+          <button
+            className='w-full font-medium my-2 bg-gray-800 text-white px-4 py-2 rounded shadow flex items-center justify-center space-x-2 hover:bg-gray-700'
+            onClick={() => signIn("github")}
+          >
+            <FaGithub size={24} />
+            <span>Sign up with GitHub</span>
+          </button>
 
-        <p className='md:hidden text-center text-gray-400 mt-2 text-sm'>
-          Already have an account?{" "}
-          <Link className='text-gray-500 underline' href='/login'>
-            Log in
-          </Link>
-        </p>
+          {/* Google login button */}
+          <button
+            className='w-full font-medium my-2 bg-red-600 text-white px-4 py-2 rounded shadow flex items-center justify-center space-x-2 hover:bg-red-700'
+            onClick={() => signIn("google")}
+          >
+            <FaGoogle size={24} />
+            <span>Sign up with Google</span>
+          </button>
+        </div>
       </div>
     </>
   );

@@ -53,6 +53,40 @@ exports.signin = async (req, res, next) => {
   sendTokenResponse(user, 200, res);
 };
 
+// @desc    OAuth
+// @route   POST /api/auth/oauth
+exports.oauthHandler = async (req, res, next) => {
+  try {
+    const { name, email, picture, oauth } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      // Add user in db & generate token
+      const newUser = await User.create({
+        name,
+        email,
+        picture,
+        oauth,
+        isEmailConfirmed: true,
+      });
+
+      try {
+        await createDefaultData(newUser);
+      } catch (error) {
+        next(error);
+      }
+
+      return sendTokenResponse(newUser, 200, res);
+    } else {
+      // Only generate token
+      return sendTokenResponse(user, 200, res);
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 // @desc   Current user
 // @route   GET /api/auth/me
 exports.getMe = async (req, res) => {
