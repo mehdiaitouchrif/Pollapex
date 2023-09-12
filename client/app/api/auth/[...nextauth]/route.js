@@ -105,6 +105,7 @@ export const authOptions = {
       return session;
     },
   },
+  secret: process.env.SECRET,
 };
 
 const handler = NextAuth(authOptions);
