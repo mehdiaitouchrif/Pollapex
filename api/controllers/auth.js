@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 const ejs = require("ejs");
+const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const { sendTokenResponse } = require("../utils/auth");
 const createDefaultData = require("../utils/defaultData");
@@ -35,6 +36,13 @@ exports.signin = async (req, res, next) => {
 
   // Check user existence
   if (!user) {
+    return res.status(401).json({
+      success: false,
+      errors: [{ msg: "Invalid email or password" }],
+    });
+  }
+
+  if (user && !user.password) {
     return res.status(401).json({
       success: false,
       errors: [{ msg: "Invalid email or password" }],
@@ -110,11 +118,51 @@ exports.findUser = async (req, res, next) => {
   }
 };
 
+// @desc    Update password
+// @route   PUT api/auth/updatepassword
+exports.updatePassword = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id).select("+password");
+
+    const { newPassword } = req.body;
+
+    user.password = newPassword;
+    if (user.oauth) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(user.password, salt);
+    }
+    await user.save();
+    sendTokenResponse(user, 200, res);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Update user details
+// @route   PUT api/auth/updatedetails
+exports.updateDetails = async (req, res, next) => {
+  try {
+    const updateFields = {
+      name: req.body.name,
+      email: req.body.email,
+    };
+    const user = await User.findByIdAndUpdate(req.user._id, updateFields, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json({ success: true, data: user });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // @desc    Forgot password
 // @route   POST /api/v1/auth/forgotpassword | Public
 exports.forgotPassword = async (req, res, next) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const user = await User.findOne({ email: req.body.email }).select(
+      "-password"
+    );
 
     if (user) {
       // Get reset token
@@ -189,6 +237,11 @@ exports.resetPassword = async (req, res, next) => {
       user.password = req.body.password;
       user.resetPasswordExpire = undefined;
       user.resetPasswordToken = undefined;
+
+      if (user.oauth) {
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(user.password, salt);
+      }
 
       await user.save();
 

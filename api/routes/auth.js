@@ -8,6 +8,8 @@ const {
   resetPassword,
   forgotPassword,
   oauthHandler,
+  updatePassword,
+  updateDetails,
 } = require("../controllers/auth");
 const { protect } = require("../middleware/auth");
 const handleInputErrors = require("../middleware/error");
@@ -39,6 +41,25 @@ router.get("/me", protect, getMe);
 router.get("/:email", findUser);
 
 router.post("/oauth", oauthHandler);
+
+router.put(
+  "/updatepassword",
+  protect,
+  body("newPassword")
+    .isString()
+    .isLength({ min: 6 })
+    .withMessage("Password must be at least 6 chars long"),
+  handleInputErrors,
+  updatePassword
+);
+router.put(
+  "/updatedetails",
+  protect,
+  body("name").isString().withMessage("Please enter updated name"),
+  body("email").isEmail().withMessage("Please enter new email"),
+  handleInputErrors,
+  updateDetails
+);
 
 router.post(
   "/forgotpassword",
