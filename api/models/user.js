@@ -40,6 +40,37 @@ UserSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
+// Cascade deletion
+UserSchema.post("findOneAndDelete", async function (doc) {
+  if (doc) {
+    const userId = doc._id;
+
+    // Delete responses associated with surveys owned by the user
+    await mongoose.model("Response").deleteMany({
+      survey: {
+        $in: await mongoose
+          .model("Survey")
+          .find({ owner: userId })
+          .select("_id"),
+      },
+    });
+
+    // Delete questions associated with surveys owned by the user
+    const ownedSurveyIds = await mongoose
+      .model("Survey")
+      .find({ owner: userId })
+      .select("questions")
+      .lean();
+
+    const questionIds = ownedSurveyIds.map((survey) => survey.questions).flat();
+
+    await mongoose.model("Question").deleteMany({ _id: { $in: questionIds } });
+
+    // Delete surveys owned by the user
+    await mongoose.model("Survey").deleteMany({ owner: userId });
+  }
+});
+
 // Sign JWT token
 UserSchema.methods.getSignedJwtToken = function () {
   return jwt.sign({ id: this._id }, JwtSecret, {

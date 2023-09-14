@@ -24,12 +24,20 @@ const SurveySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// // Cascade delete responses/questions when survey is deleted
-// SurveySchema.pre("deleteOne", async function (next) {
-//   await this.model("Response").deleteMany({ survey: this._id });
-//   // await this.model("Question").deleteMany({ _id: { $in: this.questions } });
-//   next();
-// });
+// Cascade deletion
+SurveySchema.post("findOneAndDelete", async function (doc) {
+  if (doc) {
+    const surveyId = doc._id;
+
+    // Delete responses associated with the survey
+    await mongoose.model("Response").deleteMany({ survey: surveyId });
+
+    // Delete questions associated with the survey
+    const questionIds = doc.questions;
+
+    await mongoose.model("Question").deleteMany({ _id: { $in: questionIds } });
+  }
+});
 
 const Survey = mongoose.model("Survey", SurveySchema);
 

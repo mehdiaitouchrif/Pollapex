@@ -12,10 +12,10 @@ const app = express();
 
 // Middleware
 const corsOptions = {
-  origin: ["https://pollapex.vercel.app", "http://localhost:3000"],
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true,
-  optionsSuccessStatus: 204,
+  // origin: ["https://pollapex.vercel.app", "http://localhost:3000"],
+  // methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  // credentials: true,
+  // optionsSuccessStatus: 204,
 };
 
 app.use(cors(corsOptions));

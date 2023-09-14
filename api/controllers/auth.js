@@ -7,6 +7,7 @@ const User = require("../models/user");
 const { sendTokenResponse } = require("../utils/auth");
 const createDefaultData = require("../utils/defaultData");
 const sendEmail = require("../utils/sendEmail");
+const Survey = require("../models/survey");
 
 // @desc    Sign up
 // @route   POST /api/auth/signup
@@ -251,6 +252,22 @@ exports.resetPassword = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Delete account
+// @route   DELETE /api/auth
+exports.deleteAccount = async (req, res, next) => {
+  try {
+    const user = await User.findOneAndDelete(req.user.id);
+    if (!user) {
+      const error = new Error("No user found");
+      error.statusCode = 404;
+      throw error;
+    }
+    res.status(200).json({ success: true, data: "User account removed" });
   } catch (error) {
     next(error);
   }

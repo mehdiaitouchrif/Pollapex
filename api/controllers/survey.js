@@ -143,7 +143,7 @@ exports.updateSurvey = async (req, res, next) => {
 // @route   DELETE /api/surveys/:id
 exports.deleteSurvey = async (req, res, next) => {
   try {
-    const survey = await Survey.findOne({
+    const survey = await Survey.findOneAndDelete({
       _id: req.params.id,
       owner: req.user._id,
     });
@@ -153,11 +153,6 @@ exports.deleteSurvey = async (req, res, next) => {
       throw error;
     }
 
-    // delete responses & questions
-    await Response.deleteMany({ survey: survey._id });
-    await Question.deleteMany({ _id: { $in: survey.questions } });
-
-    await survey.deleteOne();
     res.status(204).send();
   } catch (error) {
     next(error);

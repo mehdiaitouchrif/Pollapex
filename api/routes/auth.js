@@ -10,6 +10,7 @@ const {
   oauthHandler,
   updatePassword,
   updateDetails,
+  deleteAccount,
 } = require("../controllers/auth");
 const { protect } = require("../middleware/auth");
 const handleInputErrors = require("../middleware/error");
@@ -37,8 +38,10 @@ router.post(
   handleInputErrors,
   signup
 );
+
 router.get("/me", protect, getMe);
 router.get("/:email", findUser);
+router.delete("/", protect, deleteAccount);
 
 router.post("/oauth", oauthHandler);
 
