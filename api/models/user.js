@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema(
   {
     email: { type: String, required: true, unique: true },
     password: { type: String, required: false },
-    picture: { type: String, required: false, default: "default_avatar.png" },
+    picture: { type: String, required: false, default: "/default_avatar.png" },
     name: { type: String, required: true },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
@@ -33,7 +33,8 @@ const UserSchema = new mongoose.Schema(
 
 // Encrypt password
 UserSchema.pre("save", async function (next) {
-  if (this.oauth) {
+  // if email is not confirmed, then they're using email/password auth
+  if (this.isEmailConfirmed) {
     next();
   }
   const salt = await bcrypt.genSalt(10);

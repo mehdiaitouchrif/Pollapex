@@ -104,7 +104,7 @@ const ProfilePage = () => {
             <div className='w-20 my-4 bg-inherit'>
               <Image
                 src={
-                  user.picture === "default_avatar.png"
+                  user.picture === "/default_avatar.png"
                     ? "/img/default_avatar.png"
                     : user.picture
                 }
