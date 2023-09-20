@@ -10,6 +10,7 @@ const SurveySchema = new mongoose.Schema(
       required: true,
     },
     collaborators: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    pendingCollabs: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     questions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Question" }],
     backgroundImage: { type: String },
     theme: {

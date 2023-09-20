@@ -10,6 +10,19 @@ const UserSchema = new mongoose.Schema(
     password: { type: String, required: false },
     picture: { type: String, required: false, default: "/default_avatar.png" },
     name: { type: String, required: true },
+    invitations: [
+      {
+        survey: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Survey",
+        },
+        invitationToken: String,
+        accepted: {
+          type: Boolean,
+          default: false,
+        },
+      },
+    ],
     resetPasswordToken: String,
     resetPasswordExpire: Date,
     confirmEmailToken: String,

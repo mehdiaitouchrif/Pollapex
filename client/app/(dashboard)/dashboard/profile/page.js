@@ -105,7 +105,7 @@ const ProfilePage = () => {
               <Image
                 src={
                   user.picture === "/default_avatar.png"
-                    ? "/img/default_avatar.png"
+                    ? "/default_avatar.png"
                     : user.picture
                 }
                 alt='profile picture'

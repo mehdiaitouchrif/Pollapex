@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pollapex Collaboration Invite</title>
+
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 1.6;
+        padding: 1rem;
+      }
+
+      header,
+      main,
+      section,
+      footer {
+        margin: 1rem 0.5rem;
+      }
+
+      footer {
+        margin-top: 2.5rem;
+      }
+
+      a.button {
+        display: inline-block;
+        padding: 8px 12px;
+        border-radius: 4px;
+        background: black;
+        color: white;
+        font-weight: 600;
+        margin: 1rem auto 1.5rem auto;
+        text-decoration: none;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Pollapex</h1>
+      <p>Hello <%= username %>,</p>
+    </header>
+
+    <main>
+      <section>
+        <p>
+          On behalf of
+          <strong> <%= fromUser %> </strong> on Pollapex, we invite you to
+          collaborate on survey
+          <strong> <%= surveyTitle %> </strong>
+        </p>
+        <p>Let's make this survey a success together!</p>
+
+        <div>
+          <a href="<%= invitationLink %>" class="button"> Accept the invite </a>
+        </div>
+      </section>
+
+      <section>
+        <p>If you don’t use this link within 1 day, it will expire.</p>
+      </section>
+    </main>
+
+    <footer>
+      <p>Thanks,</p>
+      <p>The Pollapex Team.</p>
+    </footer>
+  </body>
+</html>

@@ -1,4 +1,5 @@
 const express = require("express");
+const { body } = require("express-validator");
 const {
   createSurvey,
   getSurveysByUser,
@@ -6,6 +7,9 @@ const {
   updateSurvey,
   deleteSurvey,
   getSurveyAnalytics,
+  sendCollaborationInvite,
+  acceptCollaborationInvite,
+  deleteCollaborator,
 } = require("../controllers/survey");
 const { protect } = require("../middleware/auth");
 const { createSurveyValidator } = require("../middleware/validators");
@@ -24,6 +28,17 @@ router
   .put(protect, updateSurvey)
   .delete(protect, deleteSurvey);
 
+router.post(
+  "/:id/invitations",
+  protect,
+  body("email").isEmail().withMessage("Please enter a valid email"),
+  handleInputErrors,
+  sendCollaborationInvite
+);
+
+router.delete("/:id/users/:userId", protect, deleteCollaborator);
+
+router.post("/invitations/:token", protect, acceptCollaborationInvite);
 router.get("/:id/analytics", protect, getSurveyAnalytics);
 
 module.exports = router;
