@@ -17,9 +17,13 @@ exports.getSurveysByUser = async (req, res, next) => {
       limit = parseInt(req.query.limit);
     }
 
-    let query = Survey.find({ owner: req.user._id })
+    const userId = req.user._id;
+    let query = Survey.find({
+      $or: [{ owner: userId }, { collaborators: { $in: [userId] } }],
+    })
       .populate("owner", "-password")
       .populate("collaborators", "-password")
+      .populate("pendingCollabs", "-password")
       .populate("questions");
 
     if (limit) {
@@ -41,6 +45,7 @@ exports.getSurveyById = async (req, res, next) => {
     const survey = await Survey.findOne({ _id: req.params.id })
       .populate("owner", "-password")
       .populate("collaborators", "-password")
+      .populate("pendingCollabs", "-password")
       .populate("questions");
     if (!survey) {
       const error = new Error("Survey not found");
@@ -99,8 +104,6 @@ exports.updateSurvey = async (req, res, next) => {
       published,
     } = req.body;
     const update = {};
-
-    console.log(req.user);
 
     if (title) update.title = title;
     if (description) update.description = description;
@@ -249,7 +252,7 @@ exports.sendCollaborationInvite = async (req, res, next) => {
     // Generate a unique and secure token for this invitation
     const token = jwt.sign({ email, surveyId }, process.env.JWT_SECRET, {
       algorithm: "HS256",
-      expiresIn: "1d",
+      expiresIn: "365d",
     });
 
     // Update pending collabs on this survey
@@ -264,7 +267,9 @@ exports.sendCollaborationInvite = async (req, res, next) => {
 
     // Add invitation to user
     const existingInvitation = user.invitations.find(
-      (invitation) => invitation.survey.toString() === surveyId
+      (invitation) =>
+        invitation.survey.toString() === surveyId &&
+        invitation.invitationToken !== "expired"
     );
 
     if (!existingInvitation) {
@@ -277,7 +282,7 @@ exports.sendCollaborationInvite = async (req, res, next) => {
     }
 
     // Compose the invitation link
-    const invitationLink = `${process.env.CLIENT_URL}/invitations/${token}`;
+    const invitationLink = `${process.env.CLIENT_URL}/invitations`;
 
     // Email template
     const emailTemplate = fs.readFileSync(
@@ -355,7 +360,7 @@ exports.acceptCollaborationInvite = async (req, res, next) => {
     survey.collaborators.push(user._id);
     survey.save();
 
-    // Remove the invitation from the user's invitations
+    // update the invitation from the user's invitations
     user.invitations = user.invitations.map((invitation) =>
       invitation.survey.toString() === surveyId &&
       invitation.invitationToken === token
@@ -374,9 +379,63 @@ exports.acceptCollaborationInvite = async (req, res, next) => {
   }
 };
 
-// @desc    Delete collaborator
-// @route   /surveys/:id/users/:userId
-exports.deleteCollaborator = async (req, res, next) => {
+// @desc    Decline collaboration invite
+// @route   POST /surveys/decline-invite/:token
+exports.declineCollaborationInvite = async (req, res, next) => {
+  try {
+    const { token } = req.params;
+
+    // Verify and decode the invitation token
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Extract data from the decoded token
+    const { email, surveyId } = decodedToken;
+
+    // Check if the survey exists
+    const survey = await Survey.findById(surveyId);
+
+    if (!survey) {
+      const error = new Error("No survey found");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    // Check if the user exists
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      const error = new Error("No user with this email found");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    // Remove the invitation from the user's invitations
+    user.invitations = user.invitations.filter(
+      (invitation) =>
+        invitation.survey.toString() !== surveyId ||
+        invitation.invitationToken !== token
+    );
+
+    // Remove the user from the pending collaborators in the survey
+    survey.pendingCollabs = survey.pendingCollabs.filter(
+      (userId) => userId.toString() !== user._id.toString()
+    );
+
+    user.save();
+    survey.save();
+
+    res.status(200).json({
+      success: true,
+      data: "Invitation declined successfully!",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Delete collaborator or cancel invite
+// @route   DELETE /surveys/:id/users/:userId
+exports.deleteCollaboratorOrCancelInvite = async (req, res, next) => {
   try {
     const { id: surveyId, userId } = req.params;
 
@@ -389,22 +448,52 @@ exports.deleteCollaborator = async (req, res, next) => {
       throw error;
     }
 
-    // Check if the user to be removed exists in the collaborators list
-    if (!survey.collaborators.includes(userId)) {
+    // Check if the user to be removed exists in the collaborators list or pending collaborators
+    if (
+      !survey.collaborators.includes(userId) &&
+      !survey.pendingCollabs.includes(userId)
+    ) {
       const error = new Error("User is not a collaborator on this survey");
       error.statusCode = 400;
       throw error;
+    }
+
+    // If the user is a pending collaborator, cancel the invite
+    if (survey.pendingCollabs.includes(userId)) {
+      // Remove the user from the pending collaborators list
+      survey.pendingCollabs = survey.pendingCollabs.filter(
+        (id) => id.toString() !== userId
+      );
+
+      // Invalidate the invitation token
+      const user = await User.findById(userId);
+      if (user) {
+        // Find and update the invitation with the corresponding survey ID and token
+        const updatedInvitations = user.invitations.map((invitation) => {
+          if (invitation.survey.toString() === surveyId) {
+            return {
+              ...invitation,
+              invitationToken: "expired",
+            };
+          }
+          return invitation;
+        });
+
+        user.invitations = updatedInvitations;
+        await user.save();
+      }
     }
 
     // Remove the user from the collaborators list
     survey.collaborators = survey.collaborators.filter(
       (id) => id.toString() !== userId
     );
+
     await survey.save();
 
     res.status(200).json({
       success: true,
-      data: "Collaborator removed successfully!",
+      data: "Collaborator removed or invite canceled successfully!",
     });
   } catch (error) {
     next(error);

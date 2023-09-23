@@ -104,23 +104,27 @@ exports.getResponses = async (req, res, next) => {
       limit = parseInt(req.query.limit);
     }
 
-    loggedInUser = req.user.id.toString();
-    const surveys = await Survey.find({ owner: loggedInUser }).select("_id");
-    const surveyIds = surveys.map((survey) => survey._id);
+    try {
+      loggedInUser = req.user.id.toString();
+      const surveys = await Survey.find({ owner: loggedInUser }).select("_id");
+      const surveyIds = surveys.map((survey) => survey._id);
 
-    let query = Response.find({ survey: { $in: surveyIds } })
-      .sort({ submittedAt: -1 })
-      .populate({
-        path: "survey",
-        select: "title owner",
-      });
+      let query = Response.find({ survey: { $in: surveyIds } })
+        .sort({ submittedAt: -1 })
+        .populate({
+          path: "survey",
+          select: "title owner",
+        });
 
-    if (limit) {
-      query = query.limit(limit);
+      if (limit) {
+        query = query.limit(limit);
+      }
+
+      const responses = await query.exec();
+      return res.status(200).json({ success: true, data: responses });
+    } catch (error) {
+      next(error);
     }
-
-    const responses = await query.exec();
-    return res.status(200).json({ success: true, data: responses });
   }
 };
 

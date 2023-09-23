@@ -98,8 +98,25 @@ exports.oauthHandler = async (req, res, next) => {
 
 // @desc   Current user
 // @route   GET /api/auth/me
-exports.getMe = async (req, res) => {
-  res.status(200).json({ success: true, data: req.user });
+exports.getMe = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id).populate({
+      path: "invitations",
+      populate: {
+        path: "survey",
+        model: "Survey",
+        select: "title",
+        populate: {
+          path: "owner",
+          model: "User",
+          select: "name picture",
+        },
+      },
+    });
+    res.status(200).json({ success: true, data: user });
+  } catch (error) {
+    next(error);
+  }
 };
 
 //@desc  Find user
@@ -261,7 +278,7 @@ exports.resetPassword = async (req, res, next) => {
 // @route   DELETE /api/auth
 exports.deleteAccount = async (req, res, next) => {
   try {
-    const user = await User.findOneAndDelete(req.user.id);
+    const user = await User.findOneAndDelete(req.user._id);
     if (!user) {
       const error = new Error("No user found");
       error.statusCode = 404;

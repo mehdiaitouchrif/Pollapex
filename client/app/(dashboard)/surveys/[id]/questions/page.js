@@ -78,6 +78,12 @@ const QuestionsPage = ({ params: { id } }) => {
             >
               Questions
             </Link>
+            <Link
+              href={`/surveys/${id}/collaborators`}
+              className='inline-block text-gray-600 text-lg hover:text-black'
+            >
+              Collaborators
+            </Link>
           </div>
 
           {questions.length > 0 && (

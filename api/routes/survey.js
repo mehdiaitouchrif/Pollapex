@@ -9,7 +9,8 @@ const {
   getSurveyAnalytics,
   sendCollaborationInvite,
   acceptCollaborationInvite,
-  deleteCollaborator,
+  declineCollaborationInvite,
+  deleteCollaboratorOrCancelInvite,
 } = require("../controllers/survey");
 const { protect } = require("../middleware/auth");
 const { createSurveyValidator } = require("../middleware/validators");
@@ -36,9 +37,11 @@ router.post(
   sendCollaborationInvite
 );
 
-router.delete("/:id/users/:userId", protect, deleteCollaborator);
+router.delete("/:id/users/:userId", protect, deleteCollaboratorOrCancelInvite);
 
 router.post("/invitations/:token", protect, acceptCollaborationInvite);
+router.delete("/invitations/:token", protect, declineCollaborationInvite);
+
 router.get("/:id/analytics", protect, getSurveyAnalytics);
 
 module.exports = router;

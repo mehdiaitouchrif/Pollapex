@@ -38,6 +38,13 @@ const SurveyPage = async ({ params: { id } }) => {
             >
               Questions
             </Link>
+
+            <Link
+              href={`/surveys/${id}/collaborators`}
+              className='inline-block text-gray-600 text-lg hover:text-black'
+            >
+              Collaborators
+            </Link>
           </div>
 
           <div className='my-4 rounded-2xl shadow bg-white'>

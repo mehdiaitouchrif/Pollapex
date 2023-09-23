@@ -167,3 +167,98 @@ export async function fetchStatistics(userToken) {
     throw error;
   }
 }
+
+export async function sendCollaborationInvite(surveyId, email, userToken) {
+  try {
+    const response = await fetch(
+      `${BACKEND_API_URL}/surveys/${surveyId}/invitations`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      }
+    );
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deleteCollaboratorHandler(
+  surveyId,
+  collaboratorId,
+  userToken
+) {
+  try {
+    const response = await fetch(
+      `${BACKEND_API_URL}/surveys/${surveyId}/users/${collaboratorId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function acceptCollaborationInvite(invitationToken, userToken) {
+  try {
+    const response = await fetch(
+      `${BACKEND_API_URL}/surveys/invitations/${invitationToken}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function declineCollaborationInvite(invitationToken, userToken) {
+  try {
+    const response = await fetch(
+      `${BACKEND_API_URL}/surveys/invitations/${invitationToken}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    throw error;
+  }
+}

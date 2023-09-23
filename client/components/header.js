@@ -5,6 +5,7 @@ import { signOut, useSession } from "next-auth/react";
 import { Lora } from "next/font/google";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import NotificationDropdown from "./notificationDropdown";
 
 const inter = Lora({
   weight: ["400", "700"],
@@ -74,55 +75,64 @@ const Header = () => {
         )}
 
         {status === "authenticated" && (
-          <div className='relative inline-block text-left' ref={dropdownRef}>
-            <div className='flex items-center gap-4'>
-              <p>{data?.user?.name} </p>
-              <button
-                type='button'
-                onClick={toggleDropdown}
-                aria-expanded={isOpen}
-                aria-haspopup='true'
-              >
-                <Image
-                  src={data?.user?.picture}
-                  alt='profile picture'
-                  width={40}
-                  height={40}
-                  className='rounded-full'
-                />
-              </button>
-            </div>
-            {isOpen && (
-              <div
-                className='origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5'
-                role='menu'
-                aria-orientation='vertical'
-                aria-labelledby='dropdown-button'
-              >
-                <div className='py-1' role='none'>
-                  <Link
-                    href='/dashboard'
-                    className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                    role='menuitem'
-                  >
-                    Dashboard
-                  </Link>
-                  <Link
-                    href='/dashboard/profile'
-                    className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                    role='menuitem'
-                  >
-                    Account
-                  </Link>
-                  <button
-                    className='inline-block w-full text-left text-red-600 font-medium px-4 py-2 text-sm hover:text-red-700 hover:bg-gray-100'
-                    onClick={() => signOut()}
-                  >
-                    Logout
-                  </button>
-                </div>
+          <div className='flex items-center gap-4 md:gap-6'>
+            <NotificationDropdown />
+            <div className='relative inline-block text-left' ref={dropdownRef}>
+              <div className='flex items-center gap-4'>
+                <button
+                  type='button'
+                  onClick={toggleDropdown}
+                  aria-expanded={isOpen}
+                  aria-haspopup='true'
+                >
+                  <Image
+                    src={data?.user?.picture}
+                    alt='profile picture'
+                    width={40}
+                    height={40}
+                    className='rounded-full'
+                  />
+                </button>
               </div>
-            )}
+              {isOpen && (
+                <div
+                  className='origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5'
+                  role='menu'
+                  aria-orientation='vertical'
+                  aria-labelledby='dropdown-button'
+                >
+                  <div className='py-1' role='none'>
+                    <Link
+                      href='/dashboard'
+                      className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                      role='menuitem'
+                    >
+                      Dashboard
+                    </Link>
+                    <Link
+                      href='/invitations'
+                      className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                      role='menuitem'
+                    >
+                      Invitations
+                    </Link>
+                    <Link
+                      href='/dashboard/profile'
+                      className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                      role='menuitem'
+                    >
+                      Account
+                    </Link>
+                    <button
+                      className='inline-block w-full text-left text-red-600 font-medium px-4 py-2 text-sm hover:text-red-700 hover:bg-gray-100'
+                      onClick={() => signOut()}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </ul>

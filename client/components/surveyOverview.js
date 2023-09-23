@@ -223,13 +223,15 @@ const SurveyOverview = ({ id }) => {
                         >
                           Save Changes
                         </button>
-                        <button
-                          type='button'
-                          onClick={deleteSurveyHandler}
-                          className='py-2 px-4 rounded-lg bg-red-500 hover:bg-red-600 font-medium text-white shadow'
-                        >
-                          Delete Survey
-                        </button>
+                        {survey.owner._id === session?.user?._id && (
+                          <button
+                            type='button'
+                            onClick={deleteSurveyHandler}
+                            className='py-2 px-4 rounded-lg bg-red-500 hover:bg-red-600 font-medium text-white shadow'
+                          >
+                            Delete Survey
+                          </button>
+                        )}
                       </div>
                     </form>
                   </Modal>

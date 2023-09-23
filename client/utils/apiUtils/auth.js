@@ -63,9 +63,11 @@ export async function deleteAccount(userToken) {
       },
     });
 
-    const data = await res.json();
+    if (res.status === 200) {
+      return true;
+    }
 
-    return data;
+    return false;
   } catch (error) {
     throw error;
   }

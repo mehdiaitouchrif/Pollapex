@@ -72,12 +72,12 @@ const ProfilePage = () => {
   const handleAccountDeletion = async () => {
     if (confirm("Are you sure? This action is irreversible.")) {
       try {
-        const result = await deleteAccount(data?.user?.token);
-        if (result.success) {
+        const isDeleted = await deleteAccount(data?.user?.token);
+        if (isDeleted) {
           signOut();
         }
-        if (result.errors) {
-          toast.error(result.errors[0].msg);
+        if (!isDeleted) {
+          toast.error("Couldn't delete account. Try later");
         }
       } catch (error) {
         console.log(error);
@@ -97,17 +97,13 @@ const ProfilePage = () => {
 
   return (
     <div className='max-w-md mx-auto p-4'>
-      {status === "loading" && <SkeletonBox />}
+      {(status === "loading" || !user) && <SkeletonBox />}
       {user && (
         <div>
           <div className='flex flex-col items-center justify-center'>
             <div className='w-20 my-4 bg-inherit'>
               <Image
-                src={
-                  user.picture === "/default_avatar.png"
-                    ? "/default_avatar.png"
-                    : user.picture
-                }
+                src={user.picture}
                 alt='profile picture'
                 width={100}
                 height={100}
