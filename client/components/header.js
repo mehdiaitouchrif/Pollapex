@@ -6,6 +6,8 @@ import { Lora } from "next/font/google";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import NotificationDropdown from "./notificationDropdown";
+import { usePathname } from "next/navigation";
+import { BiMenu } from "react-icons/bi";
 
 const inter = Lora({
   weight: ["400", "700"],
@@ -28,8 +30,19 @@ const Header = () => {
     }
   };
 
+  // Navigation menu
+  const [showMenu, setShowMenu] = useState(false);
+
+  const toggleMenu = () => {
+    setShowMenu((prev) => !prev);
+  };
+
+  // Get pathname
+  const pathname = usePathname();
+
   useEffect(() => {
     window.addEventListener("click", closeDropdown);
+
     return () => {
       window.removeEventListener("click", closeDropdown);
     };
@@ -37,13 +50,121 @@ const Header = () => {
 
   return (
     <nav className='mx-auto p-4 md:px-6 flex items-center justify-between'>
-      <Link href='/'>
-        <h1
-          className={`text-[28px] md:text-3xl font-semibold  ${inter.className}`}
-        >
-          Pollapex
-        </h1>
-      </Link>
+      <div className='flex items-center '>
+        <Link href='/' className='hidden md:block'>
+          <h1
+            className={`text-[28px] md:text-3xl -mt-1 font-semibold  ${inter.className}`}
+          >
+            Pollapex
+          </h1>
+        </Link>
+        {status === "unauthenticated" && (
+          <Link href='/'>
+            <h1
+              className={`text-[28px] md:text-3xl -mt-1 font-semibold  ${inter.className}`}
+            >
+              Pollapex
+            </h1>
+          </Link>
+        )}
+
+        {status === "authenticated" && (
+          <>
+            <div className='hidden md:flex items-center gap-4 bg-inherit ml-8 text-gray-500 font-medium hover:text-gray-600 transition-colors duration-150 ease-in-out'>
+              <Link
+                href='/dashboard'
+                className={pathname === "/dashboard" ? "text-blue-600" : ""}
+              >
+                Dashboard
+              </Link>
+              <Link
+                href='/surveys'
+                className={pathname === "/surveys" ? "text-blue-600" : ""}
+              >
+                Surveys
+              </Link>
+              <Link
+                href='/responses'
+                className={pathname === "/responses" ? "text-blue-600" : ""}
+              >
+                Responses
+              </Link>
+            </div>
+          </>
+        )}
+      </div>
+
+      {status === "authenticated" && (
+        <>
+          <BiMenu
+            size={32}
+            className='md:hidden text-gray-800 font-thin cursor-pointer hover:text-gray-900'
+            onClick={toggleMenu}
+          />
+          <div
+            className={`md:hidden fixed top-0 left-0 h-full w-56 bg-white border-r transition-transform duration-300 transform ${
+              showMenu ? "translate-x-0" : "-translate-x-56"
+            }`}
+          >
+            <div className='p-4'>
+              <button
+                onClick={toggleMenu}
+                className='text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700'
+              >
+                <svg
+                  className='w-6 h-6'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
+                    d='M6 18L18 6M6 6l12 12'
+                  />
+                  ) : (
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
+                    d='M4 6h16M4 12h16M4 18h16'
+                  />
+                </svg>
+              </button>
+            </div>
+            <nav className='p-4'>
+              <ul>
+                <li>
+                  <Link
+                    href='/dashboard'
+                    className='block py-2 text-gray-600 hover:text-gray-800'
+                  >
+                    Dashboard
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href='/surveys'
+                    className='block py-2 text-gray-600 hover:text-gray-800'
+                  >
+                    Surveys
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href='/responses'
+                    className='block py-2 text-gray-600 hover:text-gray-800'
+                  >
+                    Responses
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </>
+      )}
 
       <ul className='flex items-center ml-auto gap-2'>
         {status === "loading" && (
@@ -102,13 +223,6 @@ const Header = () => {
                   aria-labelledby='dropdown-button'
                 >
                   <div className='py-1' role='none'>
-                    <Link
-                      href='/dashboard'
-                      className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                      role='menuitem'
-                    >
-                      Dashboard
-                    </Link>
                     <Link
                       href='/invitations'
                       className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900'
