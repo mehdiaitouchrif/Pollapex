@@ -51,22 +51,13 @@ const Header = () => {
   return (
     <nav className='mx-auto p-4 md:px-6 flex items-center justify-between'>
       <div className='flex items-center '>
-        <Link href='/' className='hidden md:block'>
+        <Link href='/'>
           <h1
             className={`text-[28px] md:text-3xl -mt-1 font-semibold  ${inter.className}`}
           >
             Pollapex
           </h1>
         </Link>
-        {status === "unauthenticated" && (
-          <Link href='/'>
-            <h1
-              className={`text-[28px] md:text-3xl -mt-1 font-semibold  ${inter.className}`}
-            >
-              Pollapex
-            </h1>
-          </Link>
-        )}
 
         {status === "authenticated" && (
           <>
@@ -167,14 +158,14 @@ const Header = () => {
       )}
 
       <ul className='flex items-center ml-auto gap-2'>
-        {status === "loading" && (
+        {/* {status === "loading" && (
           <button className='bg-white text-gray-800 border border-gray-200 py-2 px-4 rounded-full flex items-center justify-center space-x-2'>
             <span className='animate-spin h-5 w-5 border-t-2 border-b-2 border-gray-800 rounded-full'></span>
             <span>Login</span>
           </button>
-        )}
+        )} */}
 
-        {status === "unauthenticated" && (
+        {(status === "unauthenticated" || status === "loading") && (
           <>
             <li>
               <Link
