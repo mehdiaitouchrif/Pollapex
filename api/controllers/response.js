@@ -156,12 +156,14 @@ exports.exportResponsesToExcel = async (req, res, next) => {
     console.log("survey id", id);
 
     // Find the survey with the given ID
-    const survey = await Survey.findById(id).populate("questions");
+    const survey = await Survey.findOne({
+      _id: id,
+      $or: [{ owner: req.user.id }, { collaborators: req.user.id }],
+    }).populate("questions");
 
-    // Make sure user owns survey
-    if (req.user._id.toString() !== survey.owner.toString()) {
-      const error = new Error("Unauthorized");
-      error.statusCode = 403;
+    if (!survey) {
+      const error = new Error("No Survey Found");
+      error.statusCode = 404;
       throw error;
     }
 
