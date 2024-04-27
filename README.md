@@ -1,6 +1,6 @@
 # Pollapex
 
-> Pollapex is a full stack JavaScript application designed for building powerful surveys and polls. It provides a user-friendly tool for collecting valuable insights and feedback from audiences. With easy sharing and analysis of results, Pollapex is perfect for businesses, organizations, and individuals looking to take their data collection to the next level.
+> A full stack JS web app for building surveys. It provides a user-friendly tool for collecting insights and feedback from audiences. Secure and easy makes it easy to share surveys and analyze results.
 
 ## Table of Contents
 
