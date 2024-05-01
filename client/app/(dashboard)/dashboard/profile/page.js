@@ -13,6 +13,7 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const ProfilePage = () => {
   const { data, status } = useSession({
@@ -26,6 +27,13 @@ const ProfilePage = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [newPassword, setNewPassword] = useState("");
+
+  // Hide / show password
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   //   Update details form
   const handleUpdateDetails = async (e) => {
@@ -96,61 +104,61 @@ const ProfilePage = () => {
   }, [data?.user]);
 
   return (
-    <div className='max-w-md mx-auto p-4'>
+    <div className="max-w-[400px] mx-auto p-4">
       {(status === "loading" || !user) && <SkeletonBox />}
       {user && (
         <div>
-          <div className='flex flex-col items-center justify-center'>
-            <div className='w-20 my-4 bg-inherit'>
+          <div className="flex flex-col items-center justify-center">
+            <div className="w-20 my-4 bg-inherit">
               <Image
                 src={user.picture}
-                alt='profile picture'
+                alt="profile picture"
                 width={100}
                 height={100}
-                className='w-full rounded-full shadow bg-inherit'
+                className="w-full rounded-full shadow bg-inherit"
               />
             </div>
-            <h3 className='text-xl font-semibold'>{user.name} </h3>
+            <h3 className="text-xl font-semibold">{user.name} </h3>
             <p>Joined {timeAgo(new Date(user.createdAt))}</p>
           </div>
 
-          <div className='p-4 shadow-sm mt-6'>
+          <div className="p-4 shadow-sm mt-6">
             {/* Update details */}
-            <form className='mb-4' onSubmit={handleUpdateDetails}>
+            <form className="mb-4" onSubmit={handleUpdateDetails}>
               <div>
                 <label
-                  className='block text-gray-700 text-sm font-semibold mb-2'
-                  htmlFor='name'
+                  className="block text-gray-700 text-sm font-semibold mb-2"
+                  htmlFor="name"
                 >
                   Full name
                 </label>
                 <input
-                  className='shadow appearance-none border border-gray-400 rounded w-full py-2 px-3 text-gray-700 mb-2 leading-tight focus:outline-none focus:shadow-outline'
-                  id='name'
-                  type='text'
+                  className="shadow appearance-none border border-gray-400 rounded w-full py-2 px-3 text-gray-700 mb-2 leading-tight focus:outline-none focus:shadow-outline"
+                  id="name"
+                  type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
-              <div className='mb-4'>
+              <div className="mb-4">
                 <label
-                  className='block text-gray-700 text-sm font-semibold mb-2'
-                  htmlFor='email'
+                  className="block text-gray-700 text-sm font-semibold mb-2"
+                  htmlFor="email"
                 >
                   Email
                 </label>
                 <input
-                  className='shadow appearance-none border border-gray-400 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline disabled:hover:cursor-not-allowed'
-                  id='email'
-                  type='email'
+                  className="shadow appearance-none border border-gray-400 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline disabled:hover:cursor-not-allowed"
+                  id="email"
+                  type="email"
                   value={email}
                   disabled={user.oauth && !user.password}
                   onChange={(e) => setEmail(e.target.value)}
                 />
 
                 {!user.password && (
-                  <p className='text-gray-500 text-xs my-4'>
-                    <span className='text-red-700'>*</span> Since you logged in
+                  <p className="text-gray-500 text-xs my-4">
+                    <span className="text-red-700">*</span> Since you logged in
                     with a social account, You have to setup a password to be
                     able to change your email.
                   </p>
@@ -158,49 +166,62 @@ const ProfilePage = () => {
               </div>
 
               <button
-                type='submit'
-                className='inline-block py-2 px-4 rounded-lg shadow mb-4 bg-blue-500 hover:bg-blue-600 text-white font-medium'
+                type="submit"
+                className="inline-block py-2 px-4 rounded-lg shadow mb-4 bg-blue-500 hover:bg-blue-600 text-white font-medium"
               >
                 Update Info
               </button>
             </form>
 
-            <form className='mb-4' onSubmit={handlePasswordUpdate}>
+            <form className="mb-4" onSubmit={handlePasswordUpdate}>
               <div>
                 <label
-                  className='block text-gray-700 text-sm font-semibold mb-2'
-                  htmlFor='password'
+                  className="block text-gray-700 text-sm font-semibold mb-2"
+                  htmlFor="password"
                 >
                   {user.password ? "Change password" : "Set up a password"}
                 </label>
-                <input
-                  className='shadow appearance-none border border-gray-400 rounded w-full py-2 px-3 text-gray-700 mb-2 leading-tight focus:outline-none focus:shadow-outline'
-                  id='password'
-                  type='password'
-                  value={newPassword}
-                  placeholder='********'
-                  onChange={(event) => setNewPassword(event.target.value)}
-                />
+                <div className="relative">
+                  <input
+                    className="shadow appearance-none border border-gray-400 rounded w-full py-2 px-3 text-gray-700 mb-2 leading-tight focus:outline-none focus:shadow-outline"
+                    id="password"
+                    type="password"
+                    value={newPassword}
+                    placeholder="Use at least 6 characters"
+                    onChange={(event) => setNewPassword(event.target.value)}
+                  />
+                  <button
+                    className="absolute right-0 top-0 mt-3 mr-4 focus:outline-none transform transition-transform duration-300 hover:scale-110"
+                    onClick={togglePasswordVisibility}
+                    type="button"
+                  >
+                    {showPassword ? (
+                      <FaEyeSlash />
+                    ) : (
+                      <FaEye className="text-gray-500" />
+                    )}
+                  </button>
+                </div>
               </div>
 
               {newPassword.length > 0 && newPassword.length < 6 && (
-                <p className='text-sm text-red-700'>
+                <p className="text-sm text-red-700">
                   Password should be at least 6 characters long
                 </p>
               )}
               {newPassword.length > 6 && (
-                <button className='inline-block py-2 px-4 mt-2 rounded-md shadow bg-blue-500 hover:bg-blue-600 text-white font-medium'>
+                <button className="inline-block py-2 px-4 mt-2 rounded-md shadow bg-blue-500 hover:bg-blue-600 text-white font-medium">
                   Update Password
                 </button>
               )}
             </form>
 
-            <h2 className='text-2xl font-semibold my-4 mt-12 pb-4 border-b'>
+            <h2 className="text-2xl font-semibold my-4 mt-12 pb-4 border-b">
               Danger Zone
             </h2>
             <button
               onClick={handleAccountDeletion}
-              className='inline-block py-2 px-4 rounded-lg shadow bg-red-500 text-white font-medium'
+              className="inline-block py-2 px-4 rounded-lg shadow bg-red-500 text-white font-medium"
             >
               Delete Account
             </button>

@@ -17,3 +17,25 @@
   animation-timing-function: ease-in-out;
   animation-fill-mode: forwards;
 }
+
+@keyframes color-change {
+  0% {
+    color: black;
+  }
+  25% {
+    color: orange;
+  }
+  50% {
+    color: red;
+  }
+  75% {
+    color: blue;
+  }
+  100% {
+    color: black;
+  }
+}
+
+.animate-color-change {
+  animation: color-change 1.5s infinite;
+}
