@@ -15,6 +15,7 @@ import {
 const SurveyResponsePage = () => {
   const [survey, setSurvey] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
   const { publicId } = useParams();
@@ -91,7 +92,8 @@ const SurveyResponsePage = () => {
         setLoading(false);
       })
       .catch((error) => {
-        console.error(error);
+        setError(error);
+        console.log(error);
       });
   }, [publicId]);
 
@@ -103,24 +105,30 @@ const SurveyResponsePage = () => {
     description: "description x",
   };
 
+  const showError = () => {
+    if (survey && !survey.published) return true;
+    if (!survey && !loading) return true;
+    if (error) return true;
+  };
+
   return (
-    <div className=' p-4 md:p-8 h-max'>
+    <div className=" p-4 md:p-8 h-max">
       <script
-        type='application/ld+json'
+        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className='max-w-3xl mx-auto mb-8'>
+      <div className="max-w-3xl mx-auto mb-8">
         {survey && survey.published && !success && (
           <>
-            <div className='p-4 rounded-lg border border-gray-200 border-t-8 border-t-blue-400 shadow-sm'>
+            <div className="p-4 rounded-lg border border-gray-200 border-t-8 border-t-blue-400 shadow-sm">
               <div>
-                <h1 className='text-3xl font-semibold'>{survey.title}</h1>
-                <p className='text-lg my-4'>{survey.description}</p>
+                <h1 className="text-3xl font-semibold">{survey.title}</h1>
+                <p className="text-lg my-4">{survey.description}</p>
               </div>
               <hr />
-              <p className='my-2'>
-                <span className='text-red-700'>*</span> Indicates required
+              <p className="my-2">
+                <span className="text-red-700">*</span> Indicates required
                 question
               </p>
             </div>
@@ -135,13 +143,13 @@ const SurveyResponsePage = () => {
         )}
 
         {survey && success && (
-          <div className='p-4 rounded-lg border border-gray-200 border-t-8 border-t-blue-400 shadow-sm'>
+          <div className="p-4 rounded-lg border border-gray-200 border-t-8 border-t-blue-400 shadow-sm">
             <div>
-              <h1 className='text-3xl font-semibold mb-2'>{survey.title}</h1>
+              <h1 className="text-3xl font-semibold mb-2">{survey.title}</h1>
               <hr />
-              <p className='my-4'>Your response has been recorded!</p>
+              <p className="my-4">Your response has been recorded!</p>
               <a
-                className='text-blue-500 underline hover:text-blue-600'
+                className="text-blue-500 underline hover:text-blue-600"
                 href={`/${publicId}`}
               >
                 Send another response
@@ -150,23 +158,23 @@ const SurveyResponsePage = () => {
           </div>
         )}
 
-        {loading && (
+        {loading && !error && (
           <>
-            <SkeletonBox styleClasses='my-4' rowNumber={2} />
-            <SkeletonBox styleClasses='my-4' rowNumber={3} />
+            <SkeletonBox styleClasses="my-4" rowNumber={2} />
+            <SkeletonBox styleClasses="my-4" rowNumber={3} />
             <SkeletonBox rowNumber={4} />
           </>
         )}
 
-        {survey && !survey.published && (
-          <div className='p-4 rounded-lg border border-gray-200 border-t-8 border-t-blue-400 shadow-sm'>
+        {showError() && (
+          <div className="p-4 rounded-lg border border-gray-200 border-t-8 border-t-blue-400 shadow-sm">
             <div>
-              <h1 className='text-2xl font-semibold mb-2'>
+              <h1 className="text-2xl font-semibold mb-2">
                 Survey does not exist or has been unpublished
               </h1>
               <hr />
               <Link
-                className='inline-block mt-4 text-blue-500 underline hover:text-blue-600'
+                className="inline-block mt-4 text-blue-500 underline hover:text-blue-600"
                 href={`/`}
               >
                 Back to the homepage
