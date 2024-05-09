@@ -79,12 +79,12 @@ const Dashboard = () => {
   }, [surveys]);
 
   return (
-    <div className='max-w-6xl mx-auto py-4 px-3 md:px-6'>
+    <div className="max-w-6xl mx-auto py-4 px-3 md:px-6">
       {showMessage && (
-        <div className='p-4 bg-blue-500 text-white font-medium flex items-start justify-between rounded-lg shadow mb-4'>
+        <div className="p-4 bg-blue-500 text-white font-medium flex items-start justify-between rounded-lg shadow mb-4">
           <div>
-            <h4 className='text-xl mb-2'>Welcome to Pollapex</h4>
-            <p className='text-sm'>
+            <h4 className="text-xl mb-2">Welcome to Pollapex</h4>
+            <p className="text-sm">
               We created a default survey for you as an example of what you can
               accomplish. Please feel free to create your own surveys or modify
               anything as you wish.
@@ -93,69 +93,67 @@ const Dashboard = () => {
 
           <div>
             <IoMdClose
-              className='text-xl cursor-pointer hover:text-gray-100'
+              className="text-xl cursor-pointer hover:text-gray-100"
               onClick={() => setShowMessage(false)}
             />
           </div>
         </div>
       )}
-      <h2 className='text-2xl md:text-3xl font-semibold my-4'>Dashboard</h2>
+      <h2 className="text-2xl md:text-3xl font-semibold my-4">Dashboard</h2>
 
       {statisticsLoading ? (
-        <div className='grid grid-cols-1 gap-y-4 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+        <div className="grid grid-cols-1 gap-y-4 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <SkeletonBox rowNumber={2} hideFull={true} />
           <SkeletonBox rowNumber={2} hideFull={true} />
           <SkeletonBox rowNumber={2} hideFull={true} />
         </div>
       ) : (
         statistics && (
-          <div className='grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-4 mb-4 md:mb-8'>
-            <>
-              <div className='bg-white rounded-lg shadow border p-4 '>
-                <p className='text-sm text-gray-400 font-medium'>
-                  Surveys created
-                </p>
-                <h4 className='text-2xl md:text-3xl my-2 font-semibold'>
-                  {statistics.totalSurveys}{" "}
-                </h4>
-              </div>
-              <div className='bg-white rounded-lg shadow border p-4'>
-                <p className='text-sm text-gray-400 font-medium'>
-                  Total responses
-                </p>
-                <h4 className='text-2xl md:text-3xl my-2 font-semibold'>
-                  {statistics.totalResponses}
-                </h4>
-              </div>
-              <div className='bg-white rounded-lg shadow border p-4'>
-                <p className='text-sm text-gray-400 font-medium'>
-                  Average responses per survey
-                </p>
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-4 mb-4 md:mb-8">
+            <div className="bg-white rounded-lg shadow border p-4 ">
+              <p className="text-sm text-gray-400 font-medium">
+                Surveys created
+              </p>
+              <h4 className="text-2xl md:text-3xl my-2 font-semibold">
+                {statistics.totalSurveys}{" "}
+              </h4>
+            </div>
+            <div className="bg-white rounded-lg shadow border p-4">
+              <p className="text-sm text-gray-400 font-medium">
+                Total responses
+              </p>
+              <h4 className="text-2xl md:text-3xl my-2 font-semibold">
+                {statistics.totalResponses}
+              </h4>
+            </div>
+            <div className="bg-white rounded-lg shadow border p-4">
+              <p className="text-sm text-gray-400 font-medium">
+                Average responses per survey
+              </p>
 
-                <h4 className='text-2xl md:text-3xl my-2 font-semibold'>
-                  {statistics.averageResponsesPerSurvey.toFixed(2)}{" "}
-                </h4>
-              </div>
-              <div className='bg-white rounded-lg shadow border p-4'>
-                <p className='text-sm text-gray-400 font-medium'>
-                  Average response time{" "}
-                </p>
-                <h4 className='text-2xl md:text-3xl my-2 font-semibold'>
-                  {statistics.averageResponseTime}{" "}
-                </h4>
-              </div>
-            </>
+              <h4 className="text-2xl md:text-3xl my-2 font-semibold">
+                {statistics.averageResponsesPerSurvey.toFixed(2)}{" "}
+              </h4>
+            </div>
+            <div className="bg-white rounded-lg shadow border p-4">
+              <p className="text-sm text-gray-400 font-medium">
+                Average response time{" "}
+              </p>
+              <h4 className="text-2xl md:text-3xl my-2 font-semibold">
+                {statistics.averageResponseTime}{" "}
+              </h4>
+            </div>
           </div>
         )
       )}
 
-      <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
-        <div className='md:col-span-2 order-2 md:order-1'>
-          <h2 className='text-2xl font-semibold my-4'>Recent surveys</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="md:col-span-2 order-2 md:order-1">
+          <h2 className="text-2xl font-semibold my-4">Recent surveys</h2>
 
           {/* Loading */}
           {surveysLoading && (
-            <div className='flex flex-col gap-y-2'>
+            <div className="flex flex-col gap-y-2">
               <SkeletonBox />
               <SkeletonBox />
             </div>
@@ -166,7 +164,7 @@ const Dashboard = () => {
             <>
               {surveys.length > 0 && (
                 <>
-                  <div className='p-4 my-4 rounded-lg bg-white shadow'>
+                  <div className="p-4 my-4 rounded-lg bg-white shadow">
                     {surveys.map((survey, idx) => (
                       <SurveyBox
                         key={survey._id}
@@ -176,30 +174,30 @@ const Dashboard = () => {
                     ))}
                   </div>
                   <Link
-                    href='/surveys'
-                    className='text-blue-600 hover:text-blue-500 font-semibold text-sm flex items-center gap-2 mb-8'
+                    href="/surveys"
+                    className="text-blue-600 hover:text-blue-500 font-semibold text-sm flex items-center gap-2 mb-8"
                   >
                     <p>See all surveys</p>
-                    <BsBoxArrowUpRight size={16} color='blue' />
+                    <BsBoxArrowUpRight size={16} color="blue" />
                   </Link>
                 </>
               )}
 
               {surveys.length === 0 && (
-                <h3 className='text-2xl text-gray-500 my-4'>
+                <h3 className="text-2xl text-gray-500 my-4">
                   Nothing here yet!
                 </h3>
               )}
             </>
           )}
 
-          <h2 className='text-2xl font-semibold my-4'>Recent responses</h2>
+          <h2 className="text-2xl font-semibold my-4">Recent responses</h2>
 
           {/* Loading */}
           {responsesLoading && (
             <>
-              <SkeletonBox styleClasses='my-2' />
-              <SkeletonBox styleClasses='my-2' />
+              <SkeletonBox styleClasses="my-2" />
+              <SkeletonBox styleClasses="my-2" />
             </>
           )}
 
@@ -207,7 +205,7 @@ const Dashboard = () => {
           {responses && (
             <>
               {responses.length > 0 && (
-                <div className='px-4 py-2 my-4 rounded-lg bg-white shadow'>
+                <div className="px-4 py-2 my-4 rounded-lg bg-white shadow">
                   {" "}
                   {responses.map((response, idx) => (
                     <div
@@ -218,17 +216,17 @@ const Dashboard = () => {
                           : "border-b-gray-100"
                       }`}
                     >
-                      <div className='mr-2'>
-                        <h4 className='font-semibold'>
+                      <div className="mr-2">
+                        <h4 className="font-semibold">
                           Response #{idx + 1} on {response.survey?.title}
                         </h4>
-                        <p className='mb-2 text-sm text-gray-400'>
+                        <p className="mb-2 text-sm text-gray-400">
                           Completed {timeAgo(response.submittedAt)}
                         </p>
                       </div>
 
                       <Link
-                        className='rounded-lg shodow py-2 px-4 border border-gray-200 hover:bg-gray-50 duration-150 ease-in-out'
+                        className="rounded-lg shodow py-2 px-4 border border-gray-200 hover:bg-gray-50 duration-150 ease-in-out"
                         href={`/responses/${response._id}`}
                       >
                         View
@@ -239,7 +237,7 @@ const Dashboard = () => {
               )}
 
               {responses.length === 0 && (
-                <h3 className='text-2xl text-gray-500 my-4'>
+                <h3 className="text-2xl text-gray-500 my-4">
                   Nothing here yet!
                 </h3>
               )}
@@ -248,11 +246,11 @@ const Dashboard = () => {
 
           {responses && responses.length > 0 && (
             <Link
-              href='/responses'
-              className='text-blue-600 hover:text-blue-500 font-semibold text-sm flex items-center gap-2 mb-8'
+              href="/responses"
+              className="text-blue-600 hover:text-blue-500 font-semibold text-sm flex items-center gap-2 mb-8"
             >
               <p>See all responses</p>
-              <BsBoxArrowUpRight size={16} color='blue' />
+              <BsBoxArrowUpRight size={16} color="blue" />
             </Link>
           )}
         </div>

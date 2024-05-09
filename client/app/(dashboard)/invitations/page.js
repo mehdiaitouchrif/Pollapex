@@ -98,62 +98,59 @@ const InvitationsPage = () => {
         </div>
       )}
 
-      {invitations &&
-        invitations
-          .sort((a, b) => (a.accepted === b.accepted ? 0 : a.accepted ? 1 : -1))
-          .map((invite) => (
-            <div
-              key={invite._id}
-              className="p-2 rounded-lg shadow-sm border border-gray-100 my-2 bg-white flex items-center justify-between"
-            >
+      {invitations
+        ?.sort((a, b) => (a.accepted === b.accepted ? 0 : a.accepted ? 1 : -1))
+        .map((invite) => (
+          <div
+            key={invite._id}
+            className="p-2 rounded-lg shadow-sm border border-gray-100 my-2 bg-white flex items-center justify-between"
+          >
+            <div>
               <div>
-                <div>
-                  <h3 className="text-lg font-semibold">
-                    {invite?.survey?.title || "Survey removed"}
-                  </h3>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Image
-                    src={
-                      invite?.survey?.owner?.picture || "/default_avatar.png"
-                    }
-                    alt="Invite sender profile image"
-                    width={30}
-                    height={30}
-                  />
-
-                  <p>{invite?.survey?.owner?.name || "Unknown"} </p>
-                </div>
+                <h3 className="text-lg font-semibold">
+                  {invite?.survey?.title || "Survey removed"}
+                </h3>
               </div>
-              {invite.accepted && invite.invitationToken !== "expired" ? (
-                <div className="flex items-center gap-2">
-                  <FaCheck color="green" size={18} />
-                  <p>Accepted</p>
-                </div>
-              ) : invite.invitationToken === "expired" || !invite.survey ? (
-                <div>Unavailable</div>
-              ) : (
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() =>
-                      acceptCollaborationInviteHandler(invite.invitationToken)
-                    }
-                    className="rounded-lg bg-blue-500 hover:bg-blue-600 font-medium text-white shodow py-2 px-4 border duration-150 ease-in-out"
-                  >
-                    Accept
-                  </button>
-                  <button
-                    onClick={() =>
-                      declineCollaborationInviteHandler(invite.invitationToken)
-                    }
-                    className="rounded-lg bg-red-500 hover:bg-red-600 font-medium text-white shodow py-2 px-4 border duration-150 ease-in-out"
-                  >
-                    Remove
-                  </button>
-                </div>
-              )}
+              <div className="flex items-center gap-2">
+                <Image
+                  src={invite?.survey?.owner?.picture || "/default_avatar.png"}
+                  alt="Invite sender profile image"
+                  width={30}
+                  height={30}
+                />
+
+                <p>{invite?.survey?.owner?.name || "Unknown"} </p>
+              </div>
             </div>
-          ))}
+            {invite.accepted && invite.invitationToken !== "expired" ? (
+              <div className="flex items-center gap-2">
+                <FaCheck color="green" size={18} />
+                <p>Accepted</p>
+              </div>
+            ) : invite.invitationToken === "expired" || !invite.survey ? (
+              <div>Unavailable</div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() =>
+                    acceptCollaborationInviteHandler(invite.invitationToken)
+                  }
+                  className="rounded-lg bg-blue-500 hover:bg-blue-600 font-medium text-white shodow py-2 px-4 border duration-150 ease-in-out"
+                >
+                  Accept
+                </button>
+                <button
+                  onClick={() =>
+                    declineCollaborationInviteHandler(invite.invitationToken)
+                  }
+                  className="rounded-lg bg-red-500 hover:bg-red-600 font-medium text-white shodow py-2 px-4 border duration-150 ease-in-out"
+                >
+                  Remove
+                </button>
+              </div>
+            )}
+          </div>
+        ))}
     </div>
   );
 };
