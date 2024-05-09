@@ -6,11 +6,11 @@ export const metadata = {
 
 const DashboardLayout = ({ children }) => {
   return (
-    <div className='min-h-screen bg-gray-50'>
-      <div className='bg-white'>
+    <div className="min-h-screen bg-gray-50">
+      <div className="bg-white">
         <Header />
       </div>
-      <div className='bg-gray-50'>{children}</div>
+      <div className="bg-gray-50">{children}</div>
     </div>
   );
 };

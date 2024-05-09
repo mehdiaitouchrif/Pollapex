@@ -83,18 +83,18 @@ const InvitationsPage = () => {
     }
   }, [session]);
 
+  if (!invitations) return <LoadingSpinner />;
+
   return (
-    <div className='max-w-5xl mx-auto p-4'>
-      <h1 className='text-2xl font-normal my-4 uppercase'>
+    <div className="max-w-5xl mx-auto p-4">
+      <h1 className="text-2xl font-normal my-4 uppercase">
         Collaboration Invites
       </h1>
 
-      {!invitations && <LoadingSpinner />}
-
       {invitations && invitations.length === 0 && (
-        <div className='flex items-center gap-4'>
-          <FaSmile size={40} className='text-yellow-400' />
-          <h2 className='my-4 text-lg font-semibold'>Nothing here yet!</h2>
+        <div className="flex items-center gap-4">
+          <FaSmile size={40} className="text-yellow-400" />
+          <h2 className="my-4 text-lg font-semibold">Nothing here yet!</h2>
         </div>
       )}
 
@@ -104,20 +104,20 @@ const InvitationsPage = () => {
           .map((invite) => (
             <div
               key={invite._id}
-              className='p-2 rounded-lg shadow-sm border border-gray-100 my-2 bg-white flex items-center justify-between'
+              className="p-2 rounded-lg shadow-sm border border-gray-100 my-2 bg-white flex items-center justify-between"
             >
               <div>
                 <div>
-                  <h3 className='text-lg font-semibold'>
+                  <h3 className="text-lg font-semibold">
                     {invite?.survey?.title || "Survey removed"}
                   </h3>
                 </div>
-                <div className='flex items-center gap-2'>
+                <div className="flex items-center gap-2">
                   <Image
                     src={
                       invite?.survey?.owner?.picture || "/default_avatar.png"
                     }
-                    alt='Invite sender profile image'
+                    alt="Invite sender profile image"
                     width={30}
                     height={30}
                   />
@@ -126,19 +126,19 @@ const InvitationsPage = () => {
                 </div>
               </div>
               {invite.accepted && invite.invitationToken !== "expired" ? (
-                <div className='flex items-center gap-2'>
-                  <FaCheck color='green' size={18} />
+                <div className="flex items-center gap-2">
+                  <FaCheck color="green" size={18} />
                   <p>Accepted</p>
                 </div>
               ) : invite.invitationToken === "expired" || !invite.survey ? (
                 <div>Unavailable</div>
               ) : (
-                <div className='flex items-center gap-2'>
+                <div className="flex items-center gap-2">
                   <button
                     onClick={() =>
                       acceptCollaborationInviteHandler(invite.invitationToken)
                     }
-                    className='rounded-lg bg-blue-500 hover:bg-blue-600 font-medium text-white shodow py-2 px-4 border duration-150 ease-in-out'
+                    className="rounded-lg bg-blue-500 hover:bg-blue-600 font-medium text-white shodow py-2 px-4 border duration-150 ease-in-out"
                   >
                     Accept
                   </button>
@@ -146,7 +146,7 @@ const InvitationsPage = () => {
                     onClick={() =>
                       declineCollaborationInviteHandler(invite.invitationToken)
                     }
-                    className='rounded-lg bg-red-500 hover:bg-red-600 font-medium text-white shodow py-2 px-4 border duration-150 ease-in-out'
+                    className="rounded-lg bg-red-500 hover:bg-red-600 font-medium text-white shodow py-2 px-4 border duration-150 ease-in-out"
                   >
                     Remove
                   </button>
