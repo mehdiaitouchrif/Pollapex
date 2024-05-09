@@ -1,5 +1,6 @@
 "use client";
 
+import ProfileLoadingSkeleton from "@/components/profileLoadingSkeleton";
 import SkeletonBox from "@/components/skeleton";
 import {
   changePassword,
@@ -103,9 +104,11 @@ const ProfilePage = () => {
     }
   }, [data?.user]);
 
+  if (status === "loading" || !user) return <ProfileLoadingSkeleton />;
+
   return (
     <div className="max-w-[400px] mx-auto p-4">
-      {(status === "loading" || !user) && <SkeletonBox />}
+      {/* {(status === "loading" || !user) && <SkeletonBox />} */}
       {user && (
         <div>
           <div className="flex flex-col items-center justify-center">
