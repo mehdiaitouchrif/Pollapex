@@ -1,17 +1,10 @@
 "use client";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
-
-import { Lora } from "next/font/google";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import NotificationLink from "./notificationLink";
 import { usePathname } from "next/navigation";
-
-const inter = Lora({
-  weight: ["400", "700"],
-  subsets: ["latin"],
-});
 
 const Header = () => {
   const { data, status } = useSession();
@@ -29,13 +22,6 @@ const Header = () => {
     }
   };
 
-  // Navigation menu
-  const [showMenu, setShowMenu] = useState(false);
-
-  const toggleMenu = () => {
-    setShowMenu((prev) => !prev);
-  };
-
   // Get pathname
   const pathname = usePathname();
 
@@ -48,14 +34,10 @@ const Header = () => {
   }, []);
 
   return (
-    <nav className="mx-auto p-4 md:px-6 flex items-center justify-between">
+    <nav className="mx-auto p-4 md:px-6 flex items-center justify-between container">
       <div className="flex items-center ">
-        <Link href="/">
-          <h1
-            className={`text-[28px] md:text-3xl -mt-1 font-semibold  ${inter.className}`}
-          >
-            Pollapex
-          </h1>
+        <Link href="/" className="text-2xl font-bold text-gray-800">
+          Pollapex
         </Link>
 
         {/* Nav auth links - desktop */}
@@ -88,7 +70,7 @@ const Header = () => {
         <ul className="flex items-center ml-auto gap-2">
           <li>
             <Link
-              className="py-2.5 px-5 rounded-md border border-black hover:bg-gray-100 hover:shadow"
+              className="px-4 py-2 text-gray-600 hover:text-gray-900 transition duration-300"
               href="/login"
             >
               Login
@@ -96,7 +78,7 @@ const Header = () => {
           </li>
           <li>
             <Link
-              className="py-2.5 px-5 rounded-md bg-black text-white hover:bg-gray-800 hover:shadow"
+              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition duration-300"
               href="/signup"
             >
               Sign up
@@ -107,7 +89,7 @@ const Header = () => {
 
       {/* Profile dropdown */}
       {status === "authenticated" && (
-        <div className="flex items-center ml-auto gap-2">
+        <div className="flex items-center ml-auto gap-2 z-50">
           <div className="flex items-center gap-4 md:gap-6">
             <NotificationLink />
             <div className="relative inline-block text-left" ref={dropdownRef}>

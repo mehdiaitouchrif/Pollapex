@@ -53,8 +53,8 @@ const Login = () => {
     <div className="flex flex-col align-center max-w-[340px] mx-auto -mt-8 md:-mt-20 h-screen justify-center p-2">
       {loading && <LoadingSpinner />}
       <div className="p-4 text-center">
-        <Link href="/">
-          <h2 className="text-[34px] mb-4 font-semibold font-mono animate-color-change">
+        <Link href="/" className="text-2xl font-bold text-gray-800">
+          <h2 className="text-[34px] mb-4 font-semibold animate-color-change">
             Pollapex
           </h2>
         </Link>

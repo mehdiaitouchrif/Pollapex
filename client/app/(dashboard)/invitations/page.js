@@ -103,52 +103,54 @@ const InvitationsPage = () => {
         .map((invite) => (
           <div
             key={invite._id}
-            className="p-2 rounded-lg shadow-sm border border-gray-100 my-2 bg-white flex items-center justify-between"
+            className="p-4 rounded-lg shadow-md border border-gray-200 my-3 bg-white flex flex-col md:flex-row items-start md:items-center justify-between"
           >
-            <div>
-              <div>
-                <h3 className="text-lg font-semibold">
-                  {invite?.survey?.title || "Survey removed"}
-                </h3>
-              </div>
-              <div className="flex items-center gap-2">
+            <div className="flex flex-col gap-2">
+              <h3 className="text-lg font-bold text-gray-800">
+                {invite?.survey?.title || "Survey removed"}
+              </h3>
+
+              <div className="flex items-center gap-3 text-gray-600">
                 <Image
                   src={invite?.survey?.owner?.picture || "/default_avatar.png"}
                   alt="Invite sender profile image"
-                  width={30}
-                  height={30}
+                  width={35}
+                  height={35}
+                  className="rounded-full"
                 />
-
-                <p>{invite?.survey?.owner?.name || "Unknown"} </p>
+                <p>{invite?.survey?.owner?.name || "Unknown"}</p>
               </div>
             </div>
-            {invite.accepted && invite.invitationToken !== "expired" ? (
-              <div className="flex items-center gap-2">
-                <FaCheck color="green" size={18} />
-                <p>Accepted</p>
-              </div>
-            ) : invite.invitationToken === "expired" || !invite.survey ? (
-              <div>Unavailable</div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() =>
-                    acceptCollaborationInviteHandler(invite.invitationToken)
-                  }
-                  className="rounded-lg bg-blue-500 hover:bg-blue-600 font-medium text-white shodow py-2 px-4 border duration-150 ease-in-out"
-                >
-                  Accept
-                </button>
-                <button
-                  onClick={() =>
-                    declineCollaborationInviteHandler(invite.invitationToken)
-                  }
-                  className="rounded-lg bg-red-500 hover:bg-red-600 font-medium text-white shodow py-2 px-4 border duration-150 ease-in-out"
-                >
-                  Remove
-                </button>
-              </div>
-            )}
+
+            <div className="mt-3 md:mt-0 flex items-center gap-4">
+              {invite.accepted && invite.invitationToken !== "expired" ? (
+                <div className="flex items-center gap-2 text-green-600">
+                  <FaCheck size={18} />
+                  <p className="font-medium">Accepted</p>
+                </div>
+              ) : invite.invitationToken === "expired" || !invite.survey ? (
+                <div className="text-red-500 font-medium">Unavailable</div>
+              ) : (
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() =>
+                      acceptCollaborationInviteHandler(invite.invitationToken)
+                    }
+                    className="rounded-md bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 shadow-md transition duration-200 ease-in-out"
+                  >
+                    Accept
+                  </button>
+                  <button
+                    onClick={() =>
+                      declineCollaborationInviteHandler(invite.invitationToken)
+                    }
+                    className="rounded-md bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 shadow-md transition duration-200 ease-in-out"
+                  >
+                    Remove
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         ))}
     </div>

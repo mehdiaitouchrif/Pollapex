@@ -86,7 +86,7 @@ const Signup = () => {
       <div className="mb-10 md:mb-auto flex flex-col align-center max-w-[340px] mx-auto -mt-12 h-full justify-center p-2">
         <div className="p-2 md:p-4 text-center">
           <Link href="/">
-            <h2 className="text-[34px] mb-4 font-semibold font-mono animate-color-change">
+            <h2 className="text-[34px] mb-4 font-semibold animate-color-change">
               Pollapex
             </h2>
           </Link>
