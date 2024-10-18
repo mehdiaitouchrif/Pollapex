@@ -1,140 +1,53 @@
 "use client";
-import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import { FaTrash } from "react-icons/fa";
-import SurveyOverview from "@/components/surveyOverview";
-import { toast } from "react-hot-toast";
-import { redirect } from "next/navigation";
+import { useSurveyData } from "@/utils/hooks/useSurveyData";
 import { fetchSurveyData } from "@/utils/apiUtils/surveys";
-import { camelCaseToTitleCase } from "@/utils/helpers";
-import { deleteQuestionHandler } from "@/utils/apiUtils/questions";
+import QuestionsList from "@/components/questionsList";
+import Link from "next/link";
 
 const QuestionsPage = ({ params: { id } }) => {
-  const { data: session } = useSession({
-    required: true,
-    onUnauthenticated() {
-      redirect(`/login?callbackUrl=/surveys/${id}`);
-    },
-  });
-  const [questions, setQuestions] = useState([]);
+  const { data, loading, error } = useSurveyData(id, fetchSurveyData);
 
-  // Delete question
-  const deleteQuestion = async (questionId) => {
-    try {
-      const isDeleted = await deleteQuestionHandler(
-        questionId,
-        session?.user?.token
-      );
-
-      if (isDeleted) {
-        toast.success("Deleted!");
-        setQuestions((prevQuestions) =>
-          prevQuestions.filter((question) => question._id !== questionId)
-        );
-      } else {
-        toast.error("Failed to delete the question. Please try again later.");
-      }
-    } catch (error) {
-      console.error("Error deleting question:", error);
-      toast.error("Failed to delete the question. Please try again later.");
-    }
-  };
-
-  useEffect(() => {
-    if (session?.user?.token) {
-      fetchSurveyData(id)
-        .then((data) => {
-          setQuestions(data.questions);
-        })
-        .catch((error) => {
-          console.error("Error fetching survey: ", error);
-        });
-    }
-  }, [session, id]);
-
-  return (
-    <>
-      <SurveyOverview id={id} />
-
-      <div className='h-full'>
-        <div className='max-w-6xl mx-auto p-3 md:p-8'>
-          <div className='flex items-center gap-8'>
-            <Link
-              href={`/surveys/${id}`}
-              className='inline-block text-gray-600 text-lg hover:text-black'
-            >
-              Overview
-            </Link>
-            <Link
-              href={`/surveys/${id}/responses`}
-              className='inline-block text-gray-600 text-lg hover:text-black'
-            >
-              Responses
-            </Link>
-            <Link
-              href={`/surveys/${id}/questions`}
-              className='inline-block font-semibold text-lg hover:text-black'
-            >
-              Questions
-            </Link>
-            <Link
-              href={`/surveys/${id}/collaborators`}
-              className='inline-block text-gray-600 text-lg hover:text-black'
-            >
-              Collaborators
-            </Link>
-          </div>
-
-          {questions.length > 0 && (
-            <div className='px-4 py-2 my-4 rounded-lg bg-white shadow'>
-              {questions.map((question, idx) => (
-                <div
-                  key={question._id}
-                  className={`flex items-center justify-between py-2 my-2 border-b ${
-                    idx === questions.length - 1
-                      ? "border-b-transparent"
-                      : "border-b-gray-100"
-                  }`}
-                >
-                  <div className='mr-2'>
-                    <h4 className='font-semibold text-gray-900'>
-                      {question.question}
-                    </h4>
-                    <p className='text-gray-400 text-sm'>
-                      {camelCaseToTitleCase(question.type)} |{" "}
-                      {question.required ? "Required" : "Optional"}{" "}
-                    </p>
-                  </div>
-
-                  <div className='flex items-center gap-4'>
-                    <Link
-                      className='rounded-lg shodow py-2 px-4 border border-gray-200 hover:bg-gray-50 duration-150 ease-in-out'
-                      href={`/surveys/${id}/questions/${question._id}`}
-                    >
-                      Edit
-                    </Link>
-                    <button
-                      onClick={() => deleteQuestion(question._id)}
-                      className='inline-block rounded-lg shodow py-3 px-4 border bg-red-50 border-red-100 shadow hover:bg-red-100 duration-150 ease-in-out'
-                    >
-                      <FaTrash size={18} className='text-red-400' />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <Link
-            className='inline-block py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg my-6'
-            href={`/surveys/${id}/add-question`}
-          >
-            Add a new question
-          </Link>
+  if (loading)
+    return (
+      <div className="inset-0 mt-10 flex justify-center ">
+        <div className="inset-0 opacity-50"></div>
+        <div className="z-10 p-4 rounded-lg">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
         </div>
       </div>
-    </>
+    );
+
+  if (error) {
+    return (
+      <div className="text-center py-12">
+        <h3 className="text-lg font-medium text-red-600 mb-2">
+          Error loading questions
+        </h3>
+        <p className="text-gray-500 mb-4">
+          {error.message || "Please try again later"}
+        </p>
+        <button
+          onClick={() => window.location.reload()}
+          className="text-blue-600 hover:text-blue-800 underline"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="h-full">
+      <QuestionsList questions={data?.questions || []} surveyId={id} />
+      {data?.questions?.length > 0 && (
+        <Link
+          className="inline-block py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg my-6"
+          href={`/surveys/${id}/add-question`}
+        >
+          Add a new question
+        </Link>
+      )}
+    </div>
   );
 };
 
