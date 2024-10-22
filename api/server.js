@@ -31,6 +31,7 @@ app.use("/api/surveys", require("./routes/survey"));
 app.use("/api/questions", require("./routes/question"));
 app.use("/api/responses", require("./routes/response"));
 app.get("/api/statistics", protect, generateStatistis);
+app.use("/api/subscribers", require("./routes/subscriber"));
 
 app.get("/api/hello", (req, res) => {
   res.status(200).json("Hello world");
