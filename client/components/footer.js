@@ -31,6 +31,7 @@ const Footer = () => (
             </li>
             <li>
               <Link
+                target="_blank"
                 href="https://github.com/mehdiaitouchrif/Pollapex"
                 className="hover:text-gray-900 transition duration-300"
               >
